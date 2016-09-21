@@ -70,6 +70,76 @@ public class InfoWindowManager
         this.fragmentManager = fragmentManager;
     }
 
+    public void onParentViewCreated(
+            @NonNull final TouchInterceptFrameLayout parent,
+            @Nullable final Bundle savedInstanceState) {
+
+        this.parent = parent;
+        this.idProvider = new FragmentContainerIdProvider(savedInstanceState);
+        this.containerSpec = generateDefaultContainerSpecs(parent.getContext());
+
+        parent.setDetector(
+                new GestureDetector(
+                        parent.getContext(),
+                        new GestureDetector.SimpleOnGestureListener() {
+
+                            @Override
+                            public boolean onScroll(
+                                    MotionEvent e1, MotionEvent e2,
+                                    float distanceX, float distanceY) {
+
+                                if (isOpen()) {
+                                    centerInfoWindow(infoWindow);
+                                }
+
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onFling(
+                                    MotionEvent e1, MotionEvent e2,
+                                    float velocityX, float velocityY) {
+
+                                if (isOpen()) {
+                                    centerInfoWindow(infoWindow);
+                                }
+
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onDoubleTap(MotionEvent e) {
+
+                                if (isOpen()) {
+                                    centerInfoWindow(infoWindow);
+                                }
+
+                                return true;
+                            }
+                        }));
+
+
+        currentWindowContainer = parent.findViewById(idProvider.currentId);
+
+        if (currentWindowContainer == null) {
+            currentWindowContainer = createContainerView(parent);
+
+            parent.addView(currentWindowContainer);
+        }
+
+    }
+
+    private View createContainerView(@NonNull final ViewGroup parent) {
+        final LinearLayout container = new LinearLayout(parent.getContext());
+
+        container.setBackground(containerSpec.background);
+        container.setLayoutParams(generateDefaultLayoutParams());
+        container.setId(idProvider.getNewId());
+        container.setVisibility(View.INVISIBLE);
+
+        return container;
+    }
+
     private FrameLayout.LayoutParams generateDefaultLayoutParams() {
 
         return generateLayoutParams(
@@ -231,7 +301,7 @@ public class InfoWindowManager
             final Animation animation;
 
             if (hideAnimation == null) {
-                
+
                 final int containerWidth = currentWindowContainer.getWidth();
                 final int containerHeight = currentWindowContainer.getHeight();
 
@@ -250,7 +320,7 @@ public class InfoWindowManager
             } else {
                 animation = hideAnimation;
             }
-            
+
             animation.setAnimationListener(new SimpleAnimationListener() {
 
                 @Override
@@ -462,65 +532,6 @@ public class InfoWindowManager
         fragmentManager.executePendingTransactions();
     }
 
-    public void onParentViewCreated(
-            @NonNull final TouchInterceptFrameLayout parent,
-            @Nullable final Bundle savedInstanceState) {
-
-        this.parent = parent;
-        this.idProvider = new FragmentContainerIdProvider(savedInstanceState);
-        this.containerSpec = generateDefaultContainerSpecs(parent.getContext());
-
-        parent.setDetector(
-                new GestureDetector(
-                        parent.getContext(),
-                        new GestureDetector.SimpleOnGestureListener() {
-
-                            @Override
-                            public boolean onScroll(
-                                    MotionEvent e1, MotionEvent e2,
-                                    float distanceX, float distanceY) {
-
-                                if (isOpen()) {
-                                    centerInfoWindow(infoWindow);
-                                }
-
-                                return true;
-                            }
-
-                            @Override
-                            public boolean onFling(
-                                    MotionEvent e1, MotionEvent e2,
-                                    float velocityX, float velocityY) {
-
-                                if (isOpen()) {
-                                    centerInfoWindow(infoWindow);
-                                }
-
-                                return true;
-                            }
-
-                            @Override
-                            public boolean onDoubleTap(MotionEvent e) {
-
-                                if (isOpen()) {
-                                    centerInfoWindow(infoWindow);
-                                }
-
-                                return true;
-                            }
-                        }));
-
-
-        currentWindowContainer = parent.findViewById(idProvider.currentId);
-
-        if (currentWindowContainer == null) {
-            currentWindowContainer = createContainerView(parent);
-
-            parent.addView(currentWindowContainer);
-        }
-
-    }
-
     private ContainerSpecification generateDefaultContainerSpecs(Context context) {
         final Drawable drawable =
                 ContextCompat.getDrawable(context, R.drawable.infowindow_background);
@@ -528,23 +539,8 @@ public class InfoWindowManager
         return new ContainerSpecification(drawable);
     }
 
-    private View createContainerView(@NonNull final ViewGroup parent) {
-        final LinearLayout container = new LinearLayout(parent.getContext());
-
-        container.setBackground(containerSpec.background);
-        container.setLayoutParams(generateDefaultLayoutParams());
-        container.setId(idProvider.getNewId());
-        container.setVisibility(View.INVISIBLE);
-
-        return container;
-    }
-
     private boolean isOpen() {
         return currentWindowContainer.getVisibility() == View.VISIBLE;
-    }
-
-    public WindowShowListener getWindowShowListener() {
-        return windowShowListener;
     }
 
     public void setWindowShowListener(WindowShowListener windowShowListener) {

@@ -1,4 +1,4 @@
-package com.appolica.sample;
+package com.appolica.sample.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,20 +7,22 @@ import android.support.v4.app.FragmentActivity;
 import com.appolica.interactiveinfowindow.InfoWindow;
 import com.appolica.interactiveinfowindow.InfoWindowManager;
 import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
+import com.appolica.sample.ItemFragment;
+import com.appolica.sample.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class SampleActivity extends FragmentActivity
+public class SampleWithMapFragmentActivity extends FragmentActivity
         implements ItemFragment.OnFragmentInteractionListener,
         InfoWindowManager.WindowShowListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sample);
+        setContentView(R.layout.activity_sample_with_map_fragment);
 
         final MapInfoWindowFragment mapInfoWindowFragment =
                 (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
@@ -28,6 +30,7 @@ public class SampleActivity extends FragmentActivity
         mapInfoWindowFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(5, 5)).title("Marker 1"));
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(1, 1)).title("Marker 2"));
 
@@ -41,7 +44,7 @@ public class SampleActivity extends FragmentActivity
 
                         final InfoWindow infoWindow = new InfoWindow(marker, markerSpec, fragment);
 
-                        mapInfoWindowFragment.getManager().toggle(infoWindow, true);
+                        mapInfoWindowFragment.infoWindowManager().toggle(infoWindow, true);
 
                         return true;
                     }
@@ -49,8 +52,7 @@ public class SampleActivity extends FragmentActivity
             }
         });
 
-        mapInfoWindowFragment.getManager().setWindowShowListener(this);
-
+        mapInfoWindowFragment.infoWindowManager().setWindowShowListener(this);
 
     }
 

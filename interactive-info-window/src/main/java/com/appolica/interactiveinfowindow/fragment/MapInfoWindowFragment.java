@@ -87,7 +87,7 @@ public class MapInfoWindowFragment extends Fragment {
         infoWindowManager.onMapReady(googleMap);
     }
 
-    public InfoWindowManager getManager() {
+    public InfoWindowManager infoWindowManager() {
         return infoWindowManager;
     }
 
