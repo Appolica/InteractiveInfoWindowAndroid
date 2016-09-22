@@ -7,7 +7,9 @@ import com.google.android.gms.maps.model.Marker;
 import java.io.Serializable;
 
 /**
- * Created by Bogomil Kolarov on 06.09.16.
+ * This class contains everything needed for an InfoWindow to be shown.
+ * It also provides a state that shows whether the window is already shown/hidden
+ * or is in the middle of showing/hiding.
  */
 public class InfoWindow {
     private Marker marker;
@@ -17,8 +19,15 @@ public class InfoWindow {
 
     private WindowState windowState = WindowState.HIDDEN;
 
+    /**
+     * @param marker The marker which determines the window's position on the screen.
+     * @param markerSpec Provides the marker's width and height.
+     * @param windowFragment The actual window that is displayed on the screen.
+     */
     public InfoWindow(
-            Marker marker, MarkerSpecification markerSpec, Fragment windowFragment) {
+            Marker marker,
+            MarkerSpecification markerSpec,
+            Fragment windowFragment) {
 
         this.marker = marker;
         this.markerSpec = markerSpec;
@@ -49,6 +58,14 @@ public class InfoWindow {
         this.windowFragment = windowFragment;
     }
 
+    /**
+     * Get window's state which could be one of the following:
+     * <br>
+     * {@link WindowState#SHOWING}, {@link WindowState#SHOWN},
+     * {@link WindowState#HIDING}, {@link WindowState#HIDDEN}
+     *
+     * @return The InfoWindow's state.
+     */
     public WindowState getWindowState() {
         return windowState;
     }
@@ -61,6 +78,9 @@ public class InfoWindow {
         SHOWING, SHOWN, HIDING, HIDDEN
     }
 
+    /**
+     * Holds the width and height of the marker.
+     */
     public static class MarkerSpecification implements Serializable {
         private int width;
         private int height;
@@ -108,7 +128,6 @@ public class InfoWindow {
         if (o instanceof InfoWindow) {
             final boolean markerCheck = ((InfoWindow) o).getMarker().getPosition().equals(marker.getPosition());
             final boolean specCheck = ((InfoWindow) o).getMarkerSpec().equals(markerSpec);
-//            final boolean fragmentCheck = ((InfoWindow) o).getWindowFragment().getId() == windowFragment.getId();
 
             return markerCheck && specCheck;
         }
@@ -116,10 +135,4 @@ public class InfoWindow {
         return super.equals(o);
     }
 
-    @Override
-    public String toString() {
-
-
-        return super.toString();
-    }
 }

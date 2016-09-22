@@ -31,6 +31,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * This is where all the magic happens. Use this class to show your interactive {@link InfoWindow}
+ * above your {@link com.google.android.gms.maps.model.Marker}.
+ */
 public class InfoWindowManager
         implements GoogleMap.OnCameraIdleListener,
         GoogleMap.OnCameraMoveStartedListener,
@@ -62,7 +66,7 @@ public class InfoWindowManager
 
     private Animation showAnimation;
     private Animation hideAnimation;
-    
+
     private WindowShowListener windowShowListener;
 
     public InfoWindowManager(@NonNull final FragmentManager fragmentManager) {
@@ -70,6 +74,17 @@ public class InfoWindowManager
         this.fragmentManager = fragmentManager;
     }
 
+    /**
+     * Call this method if you are not using
+     * {@link com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment}. If you are calling
+     * it from a Fragment we suggest you to call it in {@link Fragment#onViewCreated(View, Bundle)}
+     * and if you are calling it from an Activity you should call it in
+     * {@link android.app.Activity#onCreate(Bundle)}.
+     *
+     * @param parent             The parent of your {@link com.google.android.gms.maps.MapView} or
+     *                           {@link com.google.android.gms.maps.SupportMapFragment}.
+     * @param savedInstanceState The saved state Bundle from your Fragment/Activity.
+     */
     public void onParentViewCreated(
             @NonNull final TouchInterceptFrameLayout parent,
             @Nullable final Bundle savedInstanceState) {
@@ -152,10 +167,23 @@ public class InfoWindowManager
         return new FrameLayout.LayoutParams(infoWindowWidth, infoWindowHeight);
     }
 
+    /**
+     * Same as calling <code>toggle(infoWindow, true);</code>
+     *
+     * @param infoWindow The {@link InfoWindow} that is to be shown/hidden.
+     * @see #toggle(InfoWindow, boolean)
+     */
     public void toggle(@NonNull final InfoWindow infoWindow) {
         toggle(infoWindow, true);
     }
 
+    /**
+     * Open/hide the given {@link InfoWindow}.
+     *
+     * @param infoWindow The {@link InfoWindow} that is to be shown/hidden.
+     * @param animated   <code>true</code> if you want to toggle it with animation,
+     *                   <code>false</code> otherwise.
+     */
     public void toggle(@NonNull final InfoWindow infoWindow, final boolean animated) {
 
         if (isOpen()) {
@@ -174,10 +202,24 @@ public class InfoWindowManager
 
     }
 
+    /**
+     * Same as calling <code>show(infoWindow, true);</code>
+     *
+     * @param infoWindow The {@link InfoWindow} that is to be shown.
+     * @see #show(InfoWindow, boolean)
+     */
     public void show(@NonNull final InfoWindow infoWindow) {
         show(infoWindow, true);
     }
 
+    /**
+     * Show the given {@link InfoWindow}. Pass <code>true</code> if you want this action
+     * to be animated, <code>false</code> otherwise.
+     *
+     * @param infoWindow The {@link InfoWindow} that is to be shown.
+     * @param animated   <code>true</code> if you want to show it with animation,
+     *                   <code>false</code> otherwise.
+     */
     public void show(@NonNull final InfoWindow infoWindow, final boolean animated) {
         final InfoWindow oldWindow = this.infoWindow;
 
@@ -279,10 +321,24 @@ public class InfoWindowManager
         }
     }
 
+    /**
+     * Same as calling <code>hide(infoWindow, true);</code>
+     *
+     * @param infoWindow The {@link InfoWindow} that is to be hidden.
+     * @see #hide(InfoWindow, boolean)
+     */
     public void hide(@NonNull final InfoWindow infoWindow) {
         hide(infoWindow, true);
     }
 
+    /**
+     * Hides the given {@link InfoWindow}. Pass <code>true</code> if you want this action
+     * to be animated, <code>false</code> otherwise.
+     *
+     * @param infoWindow The {@link InfoWindow} that is to be hidden.
+     * @param animated   <code>true</code> if you want to hide it with animation,
+     *                   <code>false</code> otherwise.
+     */
     public void hide(@NonNull final InfoWindow infoWindow, final boolean animated) {
         internalHide(currentWindowContainer, infoWindow, animated);
     }
@@ -414,7 +470,7 @@ public class InfoWindowManager
                 });
     }
 
-    private boolean ensureVisible(@NonNull final  View infoWindowContainer) {
+    private boolean ensureVisible(@NonNull final View infoWindowContainer) {
 
         final int[] infoWindowLocation = new int[2];
         infoWindowContainer.getLocationOnScreen(infoWindowLocation);
@@ -543,6 +599,12 @@ public class InfoWindowManager
         return currentWindowContainer.getVisibility() == View.VISIBLE;
     }
 
+    /**
+     * Set a callback which will be invoked when an {@link InfoWindow} is changing its state.
+     *
+     * @param windowShowListener The callback that will run.
+     * @see WindowShowListener
+     */
     public void setWindowShowListener(WindowShowListener windowShowListener) {
         this.windowShowListener = windowShowListener;
     }
@@ -551,6 +613,12 @@ public class InfoWindowManager
         this.infoWindow = infoWindow;
     }
 
+    /**
+     * Get the specification of the {@link InfoWindow}'s container.
+     *
+     * @return {@link InfoWindow}'s container specification.
+     * @see ContainerSpecification
+     */
     public ContainerSpecification getContainerSpec() {
         return containerSpec;
     }
@@ -586,10 +654,22 @@ public class InfoWindowManager
         }
     }
 
+    /**
+     * This method must be called from activity's or fragment's onSaveInstanceState(Bundle outState).
+     * There is no need of calling this method if you are using
+     * {@link com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment}
+     *
+     * @param outState Bundle from activity's of fragment's onSaveInstanceState(Bundle outState).
+     */
     public void onSaveInstanceState(@NonNull final Bundle outState) {
         idProvider.onSaveInstanceState(outState);
     }
 
+    /**
+     * This method must be called from activity's or fragment's onDestroy().
+     * There is no need of calling this method if you are using
+     * {@link com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment}
+     */
     public void onDestroy() {
 
         currentWindowContainer = null;
@@ -597,6 +677,29 @@ public class InfoWindowManager
 
     }
 
+    /**
+     * Call this method in your onMapReady(GoogleMap googleMap) callback if you are not using
+     * {@link com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment}.
+     * <p>
+     * <p>Keep in mind that this method sets all camera listeners and map click listener
+     * to the googleMap object and you shouldn't set them by yourself. However if you want
+     * to listen for these events you can use the methods below: <br></p>
+     * <p>
+     * {@link #setOnCameraMoveStartedListener(GoogleMap.OnCameraMoveStartedListener)}
+     * <br>
+     * {@link #setOnCameraMoveCanceledListener(GoogleMap.OnCameraMoveCanceledListener)}
+     * <br>
+     * {@link #setOnCameraMoveListener(GoogleMap.OnCameraMoveListener)}
+     * <br>
+     * {@link #setOnCameraIdleListener(GoogleMap.OnCameraIdleListener)}
+     *
+     * @param googleMap The GoogleMap object from onMapReady callback.
+     * @see #setOnMapClickListener(GoogleMap.OnMapClickListener)
+     * @see #setOnCameraMoveStartedListener(GoogleMap.OnCameraMoveStartedListener)
+     * @see #setOnCameraMoveCanceledListener(GoogleMap.OnCameraMoveCanceledListener)
+     * @see #setOnCameraMoveListener(GoogleMap.OnCameraMoveListener)
+     * @see #setOnCameraIdleListener(GoogleMap.OnCameraIdleListener)
+     */
     public void onMapReady(@NonNull final GoogleMap googleMap) {
         this.googleMap = googleMap;
 
@@ -652,41 +755,80 @@ public class InfoWindowManager
         }
     }
 
+    /**
+     * Set onMapClickListener.
+     *
+     * @param onMapClickListener The callback that will run.
+     */
     public void setOnMapClickListener(GoogleMap.OnMapClickListener onMapClickListener) {
 
         this.onMapClickListener = onMapClickListener;
     }
 
+    /**
+     * Set onCameraIdleListener.
+     *
+     * @param onCameraIdleListener The callback that will run.
+     */
     public void setOnCameraIdleListener(GoogleMap.OnCameraIdleListener onCameraIdleListener) {
 
         this.onCameraIdleListener = onCameraIdleListener;
     }
 
+    /**
+     * Set onCameraMoveStartedListener.
+     *
+     * @param onCameraMoveStartedListener The callback that will run.
+     */
     public void setOnCameraMoveStartedListener(
             final GoogleMap.OnCameraMoveStartedListener onCameraMoveStartedListener) {
 
         this.onCameraMoveStartedListener = onCameraMoveStartedListener;
     }
 
+    /**
+     * Set onCameraMoveListener
+     *
+     * @param onCameraMoveListener The callback that will run.
+     */
     public void setOnCameraMoveListener(final GoogleMap.OnCameraMoveListener onCameraMoveListener) {
 
         this.onCameraMoveListener = onCameraMoveListener;
     }
 
+    /**
+     * Set onCameraMoveCanceledListener.
+     *
+     * @param onCameraMoveCanceledListener The callback that will run.
+     */
     public void setOnCameraMoveCanceledListener(
             final GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener) {
 
         this.onCameraMoveCanceledListener = onCameraMoveCanceledListener;
     }
 
+    /**
+     * Provide your own animation for showing the {@link InfoWindow}.
+     *
+     * @param showAnimation Show animation.
+     */
     public void setShowAnimation(Animation showAnimation) {
         this.showAnimation = showAnimation;
     }
 
+    /**
+     * Provide your own animation for hiding the {@link InfoWindow}.
+     *
+     * @param hideAnimation Hide animation.
+     */
     public void setHideAnimation(Animation hideAnimation) {
         this.hideAnimation = hideAnimation;
     }
 
+    /**
+     * Interface definition for callbacks to be invoked when an {@link InfoWindow}'s
+     * state has been changed.
+     */
     public interface WindowShowListener {
         void onWindowShowStarted(@NonNull final InfoWindow infoWindow);
 
@@ -697,6 +839,9 @@ public class InfoWindowManager
         void onWindowHidden(@NonNull final InfoWindow infoWindow);
     }
 
+    /**
+     * Class containing {@link InfoWindow}'s container details.
+     */
     public static class ContainerSpecification {
         private Drawable background;
 
