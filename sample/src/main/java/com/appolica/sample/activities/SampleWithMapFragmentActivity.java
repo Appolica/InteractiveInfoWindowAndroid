@@ -2,13 +2,15 @@ package com.appolica.sample.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.appolica.interactiveinfowindow.InfoWindow;
 import com.appolica.interactiveinfowindow.InfoWindowManager;
 import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
-import com.appolica.sample.ItemFragment;
 import com.appolica.sample.R;
+import com.appolica.sample.fragments.FormFragment;
+import com.appolica.sample.fragments.RecyclerViewFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,8 +18,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class SampleWithMapFragmentActivity extends FragmentActivity
-        implements ItemFragment.OnFragmentInteractionListener,
-        InfoWindowManager.WindowShowListener {
+        implements InfoWindowManager.WindowShowListener {
+
+    private static final String RECYCLER_VIEW = "RECYCLER_VIEW_MARKER";
+    private static final String FORM_VIEW = "FORM_VIEW_MARKER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +35,8 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
             @Override
             public void onMapReady(GoogleMap googleMap) {
 
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(5, 5)).title("Marker 1"));
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(1, 1)).title("Marker 2"));
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(5, 5)).snippet(RECYCLER_VIEW));
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(1, 1)).snippet(FORM_VIEW));
 
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
@@ -40,11 +44,23 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
 
                         final InfoWindow.MarkerSpecification markerSpec =
                                 new InfoWindow.MarkerSpecification(20, 90);
-                        final ItemFragment fragment = ItemFragment.newInstance("test", "test");
 
-                        final InfoWindow infoWindow = new InfoWindow(marker, markerSpec, fragment);
+                        Fragment fragment = null;
 
-                        mapInfoWindowFragment.infoWindowManager().toggle(infoWindow, true);
+                        switch (marker.getSnippet()) {
+                            case RECYCLER_VIEW:
+                                fragment = new RecyclerViewFragment();
+                                break;
+                            case FORM_VIEW:
+                                fragment = new FormFragment();
+                                break;
+                        }
+
+                        if (fragment != null) {
+                            final InfoWindow infoWindow = new InfoWindow(marker, markerSpec, fragment);
+                            mapInfoWindowFragment.infoWindowManager().toggle(infoWindow, true);
+                        }
+
 
                         return true;
                     }
@@ -53,11 +69,6 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
         });
 
         mapInfoWindowFragment.infoWindowManager().setWindowShowListener(this);
-
-    }
-
-    @Override
-    public void onFragmentInteraction(String id) {
 
     }
 
