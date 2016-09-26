@@ -1,9 +1,9 @@
 # InteractiveInfoWindowAndroid
-----
+
 InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The UI of yout window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
 
 ## How to use?
-----
+
 First you need to add our map fragment to your layout. It embeds the SupportMapFragment and all the magic which makes this library to work and provides its API.
 
 ```xml
@@ -60,7 +60,7 @@ You can get an instance of the GoogleMap by calling ```mapInfoWindowFragment.get
 _If you don't want to use our fragment it's okay but it's not that straight-forward. You have to bind the InfoWindowManager to your Activity/Fragment and add TouchInterceptFrameLayout as a parent of your map. Take a look at [this example](https://github.com/Appolica/InteractiveInfoWindowAndroid/blob/develop/sample/src/main/java/com/appolica/sample/activities/SampleWithMapViewActivity.java)._
 
 ## API
-----
+
 ### MapInfoWindowFragment:
 
  * ```public void getMapAsync(OnMapReadyCallback onMapReadyCallback)``` - Use this method to get the GoogleMap object asynchronously from our fragment.
@@ -85,5 +85,5 @@ The following listener settters are a copy of GoogleMap's setters. Use these met
 
 
 ## Known issues
-----
+
 The InfoWindow lags when you fling the map. Wea are open to suggestions how to fix this.
