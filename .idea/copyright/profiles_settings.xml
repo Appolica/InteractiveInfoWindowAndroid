@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="copyright 2016 appolica ltd">
+    <module2copyright>
+      <element module="Project Files" copyright="copyright 2016 appolica ltd" />
+    </module2copyright>
+  </settings>
 </component>

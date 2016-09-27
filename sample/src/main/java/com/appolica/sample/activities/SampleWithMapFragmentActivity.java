@@ -31,6 +31,8 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
         final MapInfoWindowFragment mapInfoWindowFragment =
                 (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
 
+        final InfoWindowManager infoWindowManager = mapInfoWindowFragment.infoWindowManager();
+
         mapInfoWindowFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -58,7 +60,7 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
 
                         if (fragment != null) {
                             final InfoWindow infoWindow = new InfoWindow(marker, markerSpec, fragment);
-                            mapInfoWindowFragment.infoWindowManager().toggle(infoWindow, true);
+                            infoWindowManager.toggle(infoWindow, true);
                         }
 
 
@@ -68,7 +70,27 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
             }
         });
 
-        mapInfoWindowFragment.infoWindowManager().setWindowShowListener(this);
+        infoWindowManager.setWindowShowListener(new InfoWindowManager.WindowShowListener() {
+            @Override
+            public void onWindowShowStarted(@NonNull InfoWindow infoWindow) {
+
+            }
+
+            @Override
+            public void onWindowShown(@NonNull InfoWindow infoWindow) {
+
+            }
+
+            @Override
+            public void onWindowHideStarted(@NonNull InfoWindow infoWindow) {
+
+            }
+
+            @Override
+            public void onWindowHidden(@NonNull InfoWindow infoWindow) {
+
+            }
+        });
 
     }
 
