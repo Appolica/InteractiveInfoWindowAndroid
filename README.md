@@ -4,6 +4,21 @@ InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives 
 
 ## How to use?
 
+### Add it to your Android project
+
+```gradle
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.appolica:interactive-info-window:1.0'
+}
+
+```
+
+### And then use it in your code
+
 First you need to add our map fragment to your layout. It embeds the SupportMapFragment and all the magic which makes this library to work and provides its API.
 
 ```xml
