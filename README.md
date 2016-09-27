@@ -1,6 +1,6 @@
 # InteractiveInfoWindowAndroid
 
-InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The UI of yout window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
+InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The UI of your window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
 
 ## How to use?
 
@@ -86,4 +86,4 @@ The following listener settters are a copy of GoogleMap's setters. Use these met
 
 ## Known issues
 
-The InfoWindow lags when you fling the map. Wea are open to suggestions how to fix this.
+The InfoWindow lags when you fling the map. We are open to suggestions how to fix this.
