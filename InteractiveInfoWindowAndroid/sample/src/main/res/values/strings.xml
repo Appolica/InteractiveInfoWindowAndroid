@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Sample</string>
+    <string name="infoWindowTextView">Do you like potatoes?</string>
+    <string name="yes">Yes</string>
+</resources>
