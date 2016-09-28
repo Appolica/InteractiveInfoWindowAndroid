@@ -14,6 +14,12 @@
 
 apply plugin: 'com.android.library'
 
+ext {
+    PUBLISH_GROUP_ID = 'com.appolica'
+    PUBLISH_ARTIFACT_ID = 'interactive-info-window'
+    PUBLISH_VERSION = '1.0'
+}
+
 android {
     compileSdkVersion 24
     buildToolsVersion "23.0.3"
@@ -37,3 +43,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.google.android.gms:play-services:9.6.1'
 }
+
+apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
