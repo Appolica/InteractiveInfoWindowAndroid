@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,6 +41,7 @@ import android.widget.LinearLayout;
 import com.appolica.interactiveinfowindow.animation.SimpleAnimationListener;
 import com.appolica.interactiveinfowindow.customview.TouchInterceptFrameLayout;
 import com.appolica.mapanimations.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
@@ -57,7 +59,9 @@ public class InfoWindowManager
         GoogleMap.OnMapClickListener {
 
     public static final String FRAGMENT_TAG_INFO = "InfoWindow";
-    public static final int WINDOW_ANIMATION_DURATION = 300;
+
+    public static final int DURATION_WINDOW_ANIMATION = 200;
+    public static final int DURATION_CAMERA_ENSURE_VISIBLE_ANIMATION = 500;
 
     private GoogleMap googleMap;
 
@@ -82,6 +86,8 @@ public class InfoWindowManager
     private Animation hideAnimation;
 
     private WindowShowListener windowShowListener;
+
+    private boolean hideOnFling = false;
 
     public InfoWindowManager(@NonNull final FragmentManager fragmentManager) {
 
@@ -130,7 +136,11 @@ public class InfoWindowManager
                                     float velocityX, float velocityY) {
 
                                 if (isOpen()) {
-                                    centerInfoWindow(infoWindow);
+                                    if (hideOnFling) {
+                                        hide(infoWindow);
+                                    } else {
+                                        centerInfoWindow(infoWindow);
+                                    }
                                 }
 
                                 return true;
@@ -161,7 +171,12 @@ public class InfoWindowManager
     private View createContainerView(@NonNull final ViewGroup parent) {
         final LinearLayout container = new LinearLayout(parent.getContext());
 
-        container.setBackground(containerSpec.background);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            container.setBackground(containerSpec.background);
+        } else {
+            container.setBackgroundDrawable(containerSpec.background);
+        }
+
         container.setLayoutParams(generateDefaultLayoutParams());
         container.setId(idProvider.getNewId());
         container.setVisibility(View.INVISIBLE);
@@ -318,7 +333,7 @@ public class InfoWindowManager
                                     0f, 1f,
                                     pivotX, pivotY);
 
-                            scaleAnimation.setDuration(WINDOW_ANIMATION_DURATION);
+                            scaleAnimation.setDuration(DURATION_WINDOW_ANIMATION);
                             scaleAnimation.setInterpolator(new DecelerateInterpolator());
                             scaleAnimation.setAnimationListener(animationListener);
 
@@ -383,7 +398,7 @@ public class InfoWindowManager
                         1f, 0f,
                         pivotX, pivotY);
 
-                animation.setDuration(WINDOW_ANIMATION_DURATION);
+                animation.setDuration(DURATION_WINDOW_ANIMATION);
                 animation.setInterpolator(new DecelerateInterpolator());
 
 
@@ -489,16 +504,6 @@ public class InfoWindowManager
         final int[] infoWindowLocation = new int[2];
         infoWindowContainer.getLocationOnScreen(infoWindowLocation);
 
-        final String infoWindowPosition =
-                String.format(
-                        "InfoWindow x: %d, y: %d",
-                        infoWindowLocation[0],
-                        infoWindowLocation[1]
-                );
-
-        Log.d("InfoWidow", infoWindowPosition);
-
-
         final boolean visible = true;
         final Rect infoWindowRect = new Rect();
         infoWindowContainer.getHitRect(infoWindowRect);
@@ -516,15 +521,11 @@ public class InfoWindowManager
         final int visibleWidth = infoWindowRect.width();
         final int actualWidth = infoWindowContainer.getWidth();
 
-
         final int visibleHeight = infoWindowRect.height();
         final int actualHeight = infoWindowContainer.getHeight();
 
         int scrollX = (visibleWidth - actualWidth);
         int scrollY = (visibleHeight - actualHeight);
-
-        Log.d("InvisibleWidth", scrollX + "");
-        Log.d("InvisibleHeight", scrollY + "");
 
         if (scrollX != 0) {
             if (infoWindowRect.left == parentRect.left) {
@@ -542,26 +543,8 @@ public class InfoWindowManager
             }
         }
 
-        googleMap.animateCamera(CameraUpdateFactory.scrollBy(scrollX, scrollY));
-
-
-        if (infoWindowContainer.getLocalVisibleRect(parentRect)) {
-            Log.d("InfoWindow", "FullyVisible");
-        } else {
-            Log.d("InfoWindow", "NotVisible");
-        }
-
-        System.out.println(parentRect.toString());
-
-
-        if (infoWindowContainer.getRight() > parent.getRight()) {
-            scrollX = parent.getRight() - infoWindowContainer.getRight();
-        }
-
-        if (infoWindowContainer.getLeft() < parent.getLeft()) {
-//            scrollX = parent.getLeft()currentWindowContainer.getLeft()
-        }
-
+        final CameraUpdate cameraUpdate = CameraUpdateFactory.scrollBy(scrollX, scrollY);
+        googleMap.animateCamera(cameraUpdate, DURATION_CAMERA_ENSURE_VISIBLE_ANIMATION, null);
 
         return visible;
     }
@@ -837,6 +820,18 @@ public class InfoWindowManager
      */
     public void setHideAnimation(Animation hideAnimation) {
         this.hideAnimation = hideAnimation;
+    }
+
+    /**
+     * Determine whether your {@link InfoWindow} should be closed after the user flings the map
+     * or should move with it.
+     *
+     * @param hideOnFling Pass <code>true</code> if you want to hide your {@link InfoWindow}
+     *                    when fling event occurs, pass <code>false</code> if you want your window
+     *                    to move with the map.
+     */
+    public void setHideOnFling(final boolean hideOnFling) {
+        this.hideOnFling = hideOnFling;
     }
 
     /**
