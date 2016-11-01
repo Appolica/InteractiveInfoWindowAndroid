@@ -171,12 +171,6 @@ public class InfoWindowManager
     private View createContainerView(@NonNull final ViewGroup parent) {
         final LinearLayout container = new LinearLayout(parent.getContext());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            container.setBackground(containerSpec.background);
-        } else {
-            container.setBackgroundDrawable(containerSpec.background);
-        }
-
         container.setLayoutParams(generateDefaultLayoutParams());
         container.setId(idProvider.getNewId());
         container.setVisibility(View.INVISIBLE);
@@ -221,7 +215,6 @@ public class InfoWindowManager
             if (infoWindow.equals(this.infoWindow)) {
                 hide(infoWindow, animated);
             } else {
-                hide(this.infoWindow, animated);
                 show(infoWindow, animated);
             }
 
@@ -243,7 +236,8 @@ public class InfoWindowManager
 
     /**
      * Show the given {@link InfoWindow}. Pass <code>true</code> if you want this action
-     * to be animated, <code>false</code> otherwise.
+     * to be animated, <code>false</code> otherwise. If another window has been already opened
+     * it will be closed while opening the new one.
      *
      * @param infoWindow The {@link InfoWindow} that is to be shown.
      * @param animated   <code>true</code> if you want to show it with animation,
@@ -273,20 +267,8 @@ public class InfoWindowManager
 
     private void internalShow(@NonNull final InfoWindow infoWindow, final boolean animated) {
 
+        prepareView(currentWindowContainer, infoWindow);
         addWindowFragment(infoWindow.getWindowFragment());
-
-        centerInfoWindow(infoWindow);
-
-        parent.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-
-                ensureVisible(currentWindowContainer);
-
-                parent.getViewTreeObserver().removeOnPreDrawListener(this);
-                return true;
-            }
-        });
 
         if (animated) {
 
@@ -295,6 +277,33 @@ public class InfoWindowManager
         } else {
 
             currentWindowContainer.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    private void prepareView(final View view, final InfoWindow infoWindow) {
+        view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+
+                updateWithContainerSpec(view);
+                centerInfoWindow(infoWindow);
+                ensureVisible(view);
+
+                view.getViewTreeObserver().removeOnPreDrawListener(this);
+                return true;
+            }
+        });
+    }
+
+    private void updateWithContainerSpec(final View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+
+            view.setBackground(containerSpec.background);
+
+        } else {
+
+            view.setBackgroundDrawable(containerSpec.background);
 
         }
     }
@@ -471,32 +480,21 @@ public class InfoWindowManager
         final Projection projection = googleMap.getProjection();
         final Point screenLocation = projection.toScreenLocation(infoWindow.getMarker().getPosition());
 
-        currentWindowContainer.getViewTreeObserver().addOnPreDrawListener(
-                new ViewTreeObserver.OnPreDrawListener() {
+        final int containerWidth = currentWindowContainer.getWidth();
+        final int containerHeight = currentWindowContainer.getHeight();
 
-                    @Override
-                    public boolean onPreDraw() {
+        final int x = screenLocation.x - containerWidth / 2;
+        final int y = screenLocation.y - containerHeight - infoWindow.getMarkerSpec().getHeight();
 
-                        currentWindowContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+        final int pivotX = containerWidth / 2;
+        final int pivotY = containerHeight;
 
-                        final int containerWidth = currentWindowContainer.getWidth();
-                        final int containerHeight = currentWindowContainer.getHeight();
+        currentWindowContainer.setPivotX(pivotX);
+        currentWindowContainer.setPivotY(pivotY);
 
-                        final int x = screenLocation.x - containerWidth / 2;
-                        final int y = screenLocation.y - containerHeight - infoWindow.getMarkerSpec().getHeight();
+        currentWindowContainer.setX(x);
+        currentWindowContainer.setY(y);
 
-                        final int pivotX = containerWidth / 2;
-                        final int pivotY = containerHeight;
-
-                        currentWindowContainer.setPivotX(pivotX);
-                        currentWindowContainer.setPivotY(pivotY);
-
-                        currentWindowContainer.setX(x);
-                        currentWindowContainer.setY(y);
-
-                        return true;
-                    }
-                });
     }
 
     private boolean ensureVisible(@NonNull final View infoWindowContainer) {
@@ -585,7 +583,7 @@ public class InfoWindowManager
         fragmentManager.executePendingTransactions();
     }
 
-    private ContainerSpecification generateDefaultContainerSpecs(Context context) {
+    public ContainerSpecification generateDefaultContainerSpecs(Context context) {
         final Drawable drawable =
                 ContextCompat.getDrawable(context, R.drawable.infowindow_background);
 
@@ -608,6 +606,10 @@ public class InfoWindowManager
 
     private void setInfoWindow(InfoWindow infoWindow) {
         this.infoWindow = infoWindow;
+    }
+
+    public void setContainerSpec(ContainerSpecification containerSpec) {
+        this.containerSpec = containerSpec;
     }
 
     /**
