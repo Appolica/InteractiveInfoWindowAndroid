@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.appolica:interactive-info-window:1.0'
+    compile 'com.appolica:interactive-info-window:1.0.1'
 }
 
 ```
@@ -106,7 +106,8 @@ The following listener settters are a copy of GoogleMap's setters. Use these met
 
 ## Known issues
 
-The InfoWindow lags when you fling the map. We are open to suggestions how to fix this.
+The InfoWindow lags when you fling the map. However if you want to hide it instead of moving it with the map, you can use ```InfoWindowManager.setHideOnFling(final boolean hideOnFling)```.
+We are open to suggestions how to fix this.
 
 # License
 

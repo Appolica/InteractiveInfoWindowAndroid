@@ -32,6 +32,7 @@ public class SampleWithMapFragmentActivity extends FragmentActivity
                 (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
 
         final InfoWindowManager infoWindowManager = mapInfoWindowFragment.infoWindowManager();
+        infoWindowManager.setHideOnFling(true);
 
         mapInfoWindowFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
