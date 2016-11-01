@@ -583,6 +583,11 @@ public class InfoWindowManager
         fragmentManager.executePendingTransactions();
     }
 
+    /**
+     * Generate default {@link ContainerSpecification} for the container view.
+     *
+     * @return New instance of the generated default container specs.
+     */
     public ContainerSpecification generateDefaultContainerSpecs(Context context) {
         final Drawable drawable =
                 ContextCompat.getDrawable(context, R.drawable.infowindow_background);
@@ -608,6 +613,12 @@ public class InfoWindowManager
         this.infoWindow = infoWindow;
     }
 
+    /**
+     * Set the container specifications. These specifications are global for all
+     * {@link InfoWindow}s.
+     *
+     * @param containerSpec The container specifications used for the InfoWindow container view.
+     */
     public void setContainerSpec(ContainerSpecification containerSpec) {
         this.containerSpec = containerSpec;
     }
