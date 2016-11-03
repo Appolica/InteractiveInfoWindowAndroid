@@ -1,3 +1,8 @@
+# Bug Fix by rizasif
+
+The infoWindow now comes with transparent background, so that the opacity (alpha value) is adjustable. 
+
+
 # InteractiveInfoWindowAndroid
 
 InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The UI of your window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
@@ -9,18 +14,7 @@ InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives 
 
 ## How to use?
 
-### Add it to your Android project
-
-```gradle
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile 'com.appolica:interactive-info-window:1.0.1'
-}
-
-```
+Download/Clone and import the project as a module in your android studio project.
 
 ### And then use it in your code
 
