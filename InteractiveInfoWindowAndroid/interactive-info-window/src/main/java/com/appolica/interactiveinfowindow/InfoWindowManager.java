@@ -508,6 +508,9 @@ public class InfoWindowManager
         final Rect infoWindowRect = new Rect();
         infoWindowContainer.getHitRect(infoWindowRect);
 
+        //Transparent background by rizasif
+        infoWindowContainer.setBackground(new ColorDrawable(Color.TRANSPARENT));
+
         final int[] parentPosition = new int[2];
         parent.getLocationOnScreen(parentPosition);
 
