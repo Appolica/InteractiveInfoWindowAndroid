@@ -520,8 +520,6 @@ public class InfoWindowManager
         final Rect parentRect = new Rect();
         parent.getGlobalVisibleRect(parentRect);
 
-        System.out.println(parentRect.toString());
-
         infoWindowContainer.getGlobalVisibleRect(infoWindowRect);
 
         final int visibleWidth = infoWindowRect.width();
