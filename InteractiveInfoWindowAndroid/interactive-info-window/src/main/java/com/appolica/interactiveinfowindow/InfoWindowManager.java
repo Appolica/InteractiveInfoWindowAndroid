@@ -60,6 +60,8 @@ public class InfoWindowManager
 
     public static final String FRAGMENT_TAG_INFO = "InfoWindow";
 
+    private static final String TAG = "InfoWindowManager";
+
     public static final int DURATION_WINDOW_ANIMATION = 200;
     public static final int DURATION_CAMERA_ENSURE_VISIBLE_ANIMATION = 500;
 
@@ -267,8 +269,8 @@ public class InfoWindowManager
 
     private void internalShow(@NonNull final InfoWindow infoWindow, final boolean animated) {
 
-        prepareView(currentWindowContainer, infoWindow);
         addWindowFragment(infoWindow.getWindowFragment());
+        prepareView(currentWindowContainer, infoWindow);
 
         if (animated) {
 
@@ -282,11 +284,13 @@ public class InfoWindowManager
     }
 
     private void prepareView(final View view, final InfoWindow infoWindow) {
+
+        updateWithContainerSpec(view);
+
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
 
-                updateWithContainerSpec(view);
                 centerInfoWindow(infoWindow);
                 ensureVisible(view);
 
@@ -311,16 +315,21 @@ public class InfoWindowManager
     private void animateWindowOpen(@NonNull final InfoWindow infoWindow) {
 
         final SimpleAnimationListener animationListener = new SimpleAnimationListener() {
+
             @Override
             public void onAnimationStart(Animation animation) {
+
                 currentWindowContainer.setVisibility(View.VISIBLE);
                 propagateShowEvent(infoWindow, InfoWindow.WindowState.SHOWING);
+
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+
                 propagateShowEvent(infoWindow, InfoWindow.WindowState.SHOWN);
                 setInfoWindow(infoWindow);
+
             }
         };
 
@@ -349,7 +358,6 @@ public class InfoWindowManager
                             currentWindowContainer.startAnimation(scaleAnimation);
 
                             currentWindowContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-
                             return true;
                         }
                     });
