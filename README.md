@@ -1,6 +1,6 @@
-# InteractiveInfoWindowAndroid
+# InteractiveInfoWindowAndroid *by Appolica*
 
-InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The UI of your window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
+InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The library is developed and maintained by [Appolica](http://www.appolica.com). The UI of your window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
 
 ![](https://github.com/Appolica/InteractiveInfoWindowAndroid/blob/develop/gifs/Sample1.gif?raw=true) ![](https://github.com/Appolica/InteractiveInfoWindowAndroid/blob/develop/gifs/Sample2.gif?raw=true)
 
