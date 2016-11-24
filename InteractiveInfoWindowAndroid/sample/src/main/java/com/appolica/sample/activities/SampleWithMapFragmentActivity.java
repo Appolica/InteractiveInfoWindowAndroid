@@ -17,7 +17,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class SampleWithMapFragmentActivity extends FragmentActivity
+public class SampleWithMapFragmentActivity
+        extends FragmentActivity
         implements InfoWindowManager.WindowShowListener {
 
     private static final String RECYCLER_VIEW = "RECYCLER_VIEW_MARKER";
