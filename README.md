@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.appolica:interactive-info-window:1.0.3'
+    compile 'com.appolica:interactive-info-window:1.0.4'
 }
 
 ```
