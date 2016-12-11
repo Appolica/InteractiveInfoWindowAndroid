@@ -486,7 +486,7 @@ public class InfoWindowManager
 
     private void centerInfoWindow(@NonNull final InfoWindow infoWindow) {
         final Projection projection = googleMap.getProjection();
-        final Point screenLocation = projection.toScreenLocation(infoWindow.getMarker().getPosition());
+        final Point screenLocation = projection.toScreenLocation(infoWindow.getPosition());
 
         final int containerWidth = currentWindowContainer.getWidth();
         final int containerHeight = currentWindowContainer.getHeight();
