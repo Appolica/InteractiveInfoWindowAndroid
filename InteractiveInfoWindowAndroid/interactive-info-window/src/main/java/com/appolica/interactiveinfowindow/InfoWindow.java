@@ -47,6 +47,11 @@ public class InfoWindow {
         this(marker.getPosition(), markerSpec, windowFragment);
     }
 
+    /**
+     * @param position The {@link com.google.android.gms.maps.model.LatLng} which determines the window's position on the screen.
+     * @param markerSpec Provides the marker's width and height.
+     * @param windowFragment The actual window that is displayed on the screen.
+     */
     public InfoWindow(
             LatLng position,
             MarkerSpecification markerSpec,
