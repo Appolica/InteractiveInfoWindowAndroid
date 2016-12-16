@@ -1,6 +1,6 @@
-# InteractiveInfoWindowAndroid
+# InteractiveInfoWindowAndroid *by Appolica*
 
-InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The UI of your window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
+InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map. The library is developed and maintained by [Appolica](http://www.appolica.com). The UI of your window is encapsulated in your own fragment with its own lifecycle. You just pass it to the InfoWindowManager and display it above whichever marker you want.
 
 ![](https://github.com/Appolica/InteractiveInfoWindowAndroid/blob/develop/gifs/Sample1.gif?raw=true) ![](https://github.com/Appolica/InteractiveInfoWindowAndroid/blob/develop/gifs/Sample2.gif?raw=true)
 
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.appolica:interactive-info-window:1.0.1'
+    compile 'com.appolica:interactive-info-window:1.0.4'
 }
 
 ```
@@ -93,6 +93,7 @@ _If you don't want to use our fragment it's okay but it's not that straight-forw
  * ```public void setWindowShowListener(WindowShowListener windowShowListener)``` - Listen for InfoWindow show/hide events.
  * ```public void setShowAnimation(Animation showAnimation)``` - Set your own InfoWindow show animation.
  * ```public void setHideAnimation(Animation hideAnimation)``` - Set your own InfoWindow hide animation.
+ * ```public void setContainerSpec(ContainerSpecification containerSpec)``` - Set the container specification for your InfoWindow container. The ContainerSpecification class wraps (at least for now) only the backgorund drawable of the container view. You can change the background from here.
  
 The following listener settters are a copy of GoogleMap's setters. Use these methods instead of the original ones.
  
@@ -101,8 +102,6 @@ The following listener settters are a copy of GoogleMap's setters. Use these met
  * ```public void setOnCameraMoveStartedListener(final GoogleMap.OnCameraMoveStartedListener onCameraMoveStartedListener)```
  * ```public void setOnCameraMoveListener(final GoogleMap.OnCameraMoveListener onCameraMoveListener)```
  * ```public void setOnCameraMoveCanceledListener(final GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener)```
-
-
 
 ## Known issues
 
