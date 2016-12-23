@@ -16,6 +16,7 @@ package com.appolica.interactiveinfowindow;
 
 import android.support.v4.app.Fragment;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.io.Serializable;
@@ -26,7 +27,7 @@ import java.io.Serializable;
  * or is in the middle of showing/hiding.
  */
 public class InfoWindow {
-    private Marker marker;
+    private LatLng position;
     private MarkerSpecification markerSpec;
 
     private Fragment windowFragment;
@@ -43,17 +44,28 @@ public class InfoWindow {
             MarkerSpecification markerSpec,
             Fragment windowFragment) {
 
-        this.marker = marker;
+        this(marker.getPosition(), markerSpec, windowFragment);
+    }
+
+    /**
+     * @param position The {@link com.google.android.gms.maps.model.LatLng} which determines the window's position on the screen.
+     * @param markerSpec Provides the marker's width and height.
+     * @param windowFragment The actual window that is displayed on the screen.
+     */
+    public InfoWindow(
+            LatLng position,
+            MarkerSpecification markerSpec,
+            Fragment windowFragment) {
+
+        this.position = position;
         this.markerSpec = markerSpec;
         this.windowFragment = windowFragment;
     }
 
-    public Marker getMarker() {
-        return marker;
-    }
+    public LatLng getPosition() { return position; }
 
-    public void setMarker(Marker marker) {
-        this.marker = marker;
+    public void setPosition(LatLng position) {
+        this.position = position;
     }
 
     public MarkerSpecification getMarkerSpec() {
@@ -140,7 +152,7 @@ public class InfoWindow {
     public boolean equals(Object o) {
 
         if (o instanceof InfoWindow) {
-            final boolean markerCheck = ((InfoWindow) o).getMarker().getPosition().equals(marker.getPosition());
+            final boolean markerCheck = ((InfoWindow) o).getPosition().equals(position);
             final boolean specCheck = ((InfoWindow) o).getMarkerSpec().equals(markerSpec);
 
             return markerCheck && specCheck;
