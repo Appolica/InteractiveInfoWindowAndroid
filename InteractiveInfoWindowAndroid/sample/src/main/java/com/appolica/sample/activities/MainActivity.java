@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         final ArrayList<Class<? extends Activity>> activityClasses = new ArrayList<>();
-        activityClasses.add(SampleWithMapFragmentActivity.class);
-        activityClasses.add(SampleWithMapViewActivity.class);
+        activityClasses.add(MapFragmentActivity.class);
+        activityClasses.add(MapViewActivity.class);
 
         adapter.addData(activityClasses);
 

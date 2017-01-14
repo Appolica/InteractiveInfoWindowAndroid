@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class SampleWithMapFragmentActivity
+public class MapFragmentActivity
         extends FragmentActivity
         implements InfoWindowManager.WindowShowListener {
 
@@ -47,7 +47,9 @@ public class SampleWithMapFragmentActivity
                     public boolean onMarkerClick(Marker marker) {
 
                         final InfoWindow.MarkerSpecification markerSpec =
-                                new InfoWindow.MarkerSpecification(20, 90);
+                                new InfoWindow.MarkerSpecification(10, 90);
+
+                        markerSpec.setCenterByX(false);
 
                         Fragment fragment = null;
 

@@ -26,7 +26,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -485,14 +484,27 @@ public class InfoWindowManager
     }
 
     private void centerInfoWindow(@NonNull final InfoWindow infoWindow) {
+        final InfoWindow.MarkerSpecification markerSpec = infoWindow.getMarkerSpec();
         final Projection projection = googleMap.getProjection();
-        final Point screenLocation = projection.toScreenLocation(infoWindow.getPosition());
+
+        final Point windowScreenLocation = projection.toScreenLocation(infoWindow.getPosition());
 
         final int containerWidth = currentWindowContainer.getWidth();
         final int containerHeight = currentWindowContainer.getHeight();
 
-        final int x = screenLocation.x - containerWidth / 2;
-        final int y = screenLocation.y - containerHeight - infoWindow.getMarkerSpec().getHeight();
+        final int x;
+        if (markerSpec.centerByX()) {
+            x = windowScreenLocation.x - containerWidth / 2;
+        } else {
+            x = windowScreenLocation.x + markerSpec.getOffsetX();
+        }
+
+        final int y;
+        if (markerSpec.centerByY()) {
+            y = windowScreenLocation.y - containerHeight / 2;
+        } else {
+            y = windowScreenLocation.y - containerHeight - markerSpec.getOffsetY();
+        }
 
         final int pivotX = containerWidth / 2;
         final int pivotY = containerHeight;
@@ -502,7 +514,6 @@ public class InfoWindowManager
 
         currentWindowContainer.setX(x);
         currentWindowContainer.setY(y);
-
     }
 
     private boolean ensureVisible(@NonNull final View infoWindowContainer) {

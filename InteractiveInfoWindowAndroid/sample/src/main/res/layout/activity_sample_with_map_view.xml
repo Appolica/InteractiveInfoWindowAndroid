@@ -5,7 +5,7 @@
     android:id="@+id/activity_sample_with_map_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.appolica.sample.activities.SampleWithMapViewActivity">
+    tools:context="com.appolica.sample.activities.MapViewActivity">
 
     <com.appolica.interactiveinfowindow.customview.TouchInterceptFrameLayout
         android:id="@+id/mapViewContainer"
