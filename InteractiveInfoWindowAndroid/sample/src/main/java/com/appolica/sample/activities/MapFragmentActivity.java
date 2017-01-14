@@ -46,8 +46,11 @@ public class MapFragmentActivity
                     @Override
                     public boolean onMarkerClick(Marker marker) {
 
+                        final int offsetX = (int) getResources().getDimension(R.dimen.marker_offset_x);
+                        final int offsetY = (int) getResources().getDimension(R.dimen.marker_offset_y);
+
                         final InfoWindow.MarkerSpecification markerSpec =
-                                new InfoWindow.MarkerSpecification(10, 90);
+                                new InfoWindow.MarkerSpecification(offsetX, offsetY);
 
                         markerSpec.setCenterByX(false);
 

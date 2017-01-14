@@ -88,8 +88,11 @@ public class MapViewActivity
             @Override
             public boolean onMarkerClick(Marker marker) {
 
+                final int offsetX = (int) getResources().getDimension(R.dimen.marker_offset_x);
+                final int offsetY = (int) getResources().getDimension(R.dimen.marker_offset_y);
+
                 final InfoWindow.MarkerSpecification markerSpec =
-                        new InfoWindow.MarkerSpecification(20, 90);
+                        new InfoWindow.MarkerSpecification(offsetX, offsetY);
 
                 Fragment fragment = null;
 

@@ -158,7 +158,7 @@ public class InfoWindow {
         /**
          * Set whether the InfoWindow's center by x should be the same as the marker's
          * screen x coordinate.
-         * If false, offsetX will be used. Default value is true.
+         * If false, offsetX will be used and applied on the x position of the view. Default value is true.
          *
          * @param centerByX Pass true if you want InfoWindow's x center to be the
          *                  same as the marker's screen x coordinate. Pass false if you want
@@ -177,7 +177,7 @@ public class InfoWindow {
         /**
          * Set whether the InfoWindow's center by y should be the same as the marker's
          * screen y coordinate.
-         * If false, offsetY will be used. Default value is false.
+         * If false, offsetY will be used and applied on the y position of the view. Default value is false.
          *
          * @param centerByY Pass true if you want InfoWindow's y center to be the
          *                  same as the marker's screen y coordinate. Pass false if you want
