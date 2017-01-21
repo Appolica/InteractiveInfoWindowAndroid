@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class SampleWithMapViewActivity
+public class MapViewActivity
         extends FragmentActivity
         implements OnMapReadyCallback {
 
@@ -88,8 +88,11 @@ public class SampleWithMapViewActivity
             @Override
             public boolean onMarkerClick(Marker marker) {
 
+                final int offsetX = (int) getResources().getDimension(R.dimen.marker_offset_x);
+                final int offsetY = (int) getResources().getDimension(R.dimen.marker_offset_y);
+
                 final InfoWindow.MarkerSpecification markerSpec =
-                        new InfoWindow.MarkerSpecification(20, 90);
+                        new InfoWindow.MarkerSpecification(offsetX, offsetY);
 
                 Fragment fragment = null;
 

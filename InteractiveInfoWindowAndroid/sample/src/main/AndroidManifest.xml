@@ -15,9 +15,9 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDVLUajQUqxjUU5igdTaUMYcFd9uenZgjc"/>
 
-        <activity android:name=".activities.SampleWithMapFragmentActivity">
+        <activity android:name=".activities.MapFragmentActivity">
         </activity>
-        <activity android:name=".activities.SampleWithMapViewActivity">
+        <activity android:name=".activities.MapViewActivity">
         </activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>

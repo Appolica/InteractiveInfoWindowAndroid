@@ -36,7 +36,7 @@ public class InfoWindow {
 
     /**
      * @param marker The marker which determines the window's position on the screen.
-     * @param markerSpec Provides the marker's width and height.
+     * @param markerSpec Provides the marker's offsetX and offsetY.
      * @param windowFragment The actual window that is displayed on the screen.
      */
     public InfoWindow(
@@ -49,7 +49,7 @@ public class InfoWindow {
 
     /**
      * @param position The {@link com.google.android.gms.maps.model.LatLng} which determines the window's position on the screen.
-     * @param markerSpec Provides the marker's width and height.
+     * @param markerSpec Provides the marker's offsetX and offsetY.
      * @param windowFragment The actual window that is displayed on the screen.
      */
     public InfoWindow(
@@ -104,32 +104,89 @@ public class InfoWindow {
         SHOWING, SHOWN, HIDING, HIDDEN
     }
 
-    /**
-     * Holds the width and height of the marker.
-     */
     public static class MarkerSpecification implements Serializable {
-        private int width;
-        private int height;
+        private int offsetX;
+        private int offsetY;
 
-        public MarkerSpecification(int width, int height) {
-            this.width = width;
-            this.height = height;
+        private boolean centerByX = true;
+        private boolean centerByY = false;
+
+        /**
+         * Create marker specification by providing InfoWindow's x and y offsets from marker's
+         * screen location.
+         *
+         * <p>
+         *    Note: By default offsetX will be ignored, so in order for it to take effect, you
+         *    must call setCenterByX(false).
+         *
+         *    Also if you want to use dp, you should convert the values to px by yourself.
+         * </p>
+         *
+         * @param offsetX InfoWindow's offset by x from marker's screen location.
+         *                Value must be in px.
+         * @param offsetY InfoWindow's offset by y from marker's screen location.
+         *                Value must be in px.
+         *
+         * @see #setCenterByX(boolean)
+         * @see #setCenterByY(boolean)
+         */
+        public MarkerSpecification(int offsetX, int offsetY) {
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
         }
 
-        public int getWidth() {
-            return width;
+        public int getOffsetX() {
+            return offsetX;
         }
 
-        public void setWidth(int width) {
-            this.width = width;
+        public void setOffsetX(int offsetX) {
+            this.offsetX = offsetX;
         }
 
-        public int getHeight() {
-            return height;
+        public int getOffsetY() {
+            return offsetY;
         }
 
-        public void setHeight(int height) {
-            this.height = height;
+        public void setOffsetY(int offsetY) {
+            this.offsetY = offsetY;
+        }
+
+        public boolean centerByX() {
+            return centerByX;
+        }
+
+        /**
+         * Set whether the InfoWindow's center by x should be the same as the marker's
+         * screen x coordinate.
+         * If false, offsetX will be used and applied on the x position of the view. Default value is true.
+         *
+         * @param centerByX Pass true if you want InfoWindow's x center to be the
+         *                  same as the marker's screen x coordinate. Pass false if you want
+         *                  offsetX to be used instead.
+         *
+         * @see com.appolica.interactiveinfowindow.InfoWindowManager#centerInfoWindow(InfoWindow)
+         */
+        public void setCenterByX(boolean centerByX) {
+            this.centerByX = centerByX;
+        }
+
+        public boolean centerByY() {
+            return centerByY;
+        }
+
+        /**
+         * Set whether the InfoWindow's center by y should be the same as the marker's
+         * screen y coordinate.
+         * If false, offsetY will be used and applied on the y position of the view. Default value is false.
+         *
+         * @param centerByY Pass true if you want InfoWindow's y center to be the
+         *                  same as the marker's screen y coordinate. Pass false if you want
+         *                  offsetX to be used instead.
+         *
+         * @see com.appolica.interactiveinfowindow.InfoWindowManager#centerInfoWindow(InfoWindow)
+         */
+        public void setCenterByY(boolean centerByY) {
+            this.centerByY = centerByY;
         }
 
         @Override
@@ -138,10 +195,9 @@ public class InfoWindow {
             if (o instanceof MarkerSpecification) {
                 final MarkerSpecification markerSpecification = (MarkerSpecification) o;
 
-                final boolean widthCheck = markerSpecification.getWidth() == width;
-                final boolean heightCheck = markerSpecification.getHeight() == height;
+                final boolean offsetCheck = markerSpecification.getOffsetY() == offsetY;
 
-                return widthCheck && heightCheck;
+                return offsetCheck;
             }
 
             return super.equals(o);
