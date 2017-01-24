@@ -18,14 +18,13 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,9 +67,9 @@ public class InfoWindowManager
 
     private FragmentManager fragmentManager;
 
-    private InfoWindow infoWindow;
+    private InfoWindow currentWindow;
     private ViewGroup parent;
-    private View currentWindowContainer;
+    private View currentContainer;
 
     private ContainerSpecification containerSpec;
 
@@ -125,7 +124,7 @@ public class InfoWindowManager
                                     float distanceX, float distanceY) {
 
                                 if (isOpen()) {
-                                    centerInfoWindow(infoWindow);
+                                    centerInfoWindow(currentWindow, currentContainer);
                                 }
 
                                 return true;
@@ -138,9 +137,9 @@ public class InfoWindowManager
 
                                 if (isOpen()) {
                                     if (hideOnFling) {
-                                        hide(infoWindow);
+                                        hide(currentWindow);
                                     } else {
-                                        centerInfoWindow(infoWindow);
+                                        centerInfoWindow(currentWindow, currentContainer);
                                     }
                                 }
 
@@ -151,25 +150,31 @@ public class InfoWindowManager
                             public boolean onDoubleTap(MotionEvent e) {
 
                                 if (isOpen()) {
-                                    centerInfoWindow(infoWindow);
+                                    centerInfoWindow(currentWindow, currentContainer);
                                 }
 
                                 return true;
                             }
                         }));
 
+        currentContainer = parent.findViewById(idProvider.currentId);
 
-        currentWindowContainer = parent.findViewById(idProvider.currentId);
+        if (currentContainer == null) {
+            currentContainer = createContainer(parent);
 
-        if (currentWindowContainer == null) {
-            currentWindowContainer = createContainerView(parent);
+            parent.addView(currentContainer);
+        }
 
-            parent.addView(currentWindowContainer);
+        final Fragment oldFragment = fragmentManager.findFragmentByTag(FRAGMENT_TAG_INFO);
+        if (oldFragment != null) {
+            fragmentManager.beginTransaction()
+                    .remove(oldFragment)
+                    .commitNow();
         }
 
     }
 
-    private View createContainerView(@NonNull final ViewGroup parent) {
+    private View createContainer(@NonNull final ViewGroup parent) {
         final LinearLayout container = new LinearLayout(parent.getContext());
 
         container.setLayoutParams(generateDefaultLayoutParams());
@@ -192,7 +197,7 @@ public class InfoWindowManager
     }
 
     /**
-     * Same as calling <code>toggle(infoWindow, true);</code>
+     * Same as calling <code>toggle(currentWindow, true);</code>
      *
      * @param infoWindow The {@link InfoWindow} that is to be shown/hidden.
      * @see #toggle(InfoWindow, boolean)
@@ -213,7 +218,7 @@ public class InfoWindowManager
         if (isOpen()) {
             // If the toggled window is tha same as the already opened one, close it.
             // Otherwise close the currently opened window and open the new one.
-            if (infoWindow.equals(this.infoWindow)) {
+            if (infoWindow.equals(currentWindow)) {
                 hide(infoWindow, animated);
             } else {
                 show(infoWindow, animated);
@@ -226,7 +231,7 @@ public class InfoWindowManager
     }
 
     /**
-     * Same as calling <code>show(infoWindow, true);</code>
+     * Same as calling <code>show(currentWindow, true);</code>
      *
      * @param infoWindow The {@link InfoWindow} that is to be shown.
      * @see #show(InfoWindow, boolean)
@@ -240,44 +245,39 @@ public class InfoWindowManager
      * to be animated, <code>false</code> otherwise. If another window has been already opened
      * it will be closed while opening the new one.
      *
-     * @param infoWindow The {@link InfoWindow} that is to be shown.
-     * @param animated   <code>true</code> if you want to show it with animation,
-     *                   <code>false</code> otherwise.
+     * @param window   The {@link InfoWindow} that is to be shown.
+     * @param animated <code>true</code> if you want to show it with animation,
+     *                 <code>false</code> otherwise.
      */
-    public void show(@NonNull final InfoWindow infoWindow, final boolean animated) {
-        final InfoWindow oldWindow = this.infoWindow;
+    public void show(@NonNull final InfoWindow window, final boolean animated) {
+        // Check if already opened
+        if (isOpen()) {
 
-        setInfoWindow(infoWindow);
+            internalHide(currentContainer, currentWindow);
 
-        final Fragment currentWindowFragment =
-                fragmentManager.findFragmentById(idProvider.currentId);
-
-        if (currentWindowFragment != null) {
-
-            final View oldContainer = currentWindowContainer;
-
-            internalHide(oldContainer, oldWindow);
-
-            currentWindowContainer = createContainerView(parent);
-
-            parent.addView(currentWindowContainer);
+            currentContainer = createContainer(parent);
+            parent.addView(currentContainer);
         }
 
-        internalShow(infoWindow, animated);
+        setCurrentWindow(window);
+
+        internalShow(window, currentContainer, animated);
     }
 
-    private void internalShow(@NonNull final InfoWindow infoWindow, final boolean animated) {
+    private void internalShow(@NonNull final InfoWindow infoWindow,
+                              @NonNull final View container,
+                              final boolean animated) {
 
-        addWindowFragment(infoWindow.getWindowFragment());
-        prepareView(currentWindowContainer, infoWindow);
+        addFragment(infoWindow.getFragment(), container);
+        prepareView(container, infoWindow);
 
         if (animated) {
 
-            animateWindowOpen(infoWindow);
+            animateWindowOpen(infoWindow, container);
 
         } else {
 
-            currentWindowContainer.setVisibility(View.VISIBLE);
+            container.setVisibility(View.VISIBLE);
 
         }
     }
@@ -290,7 +290,7 @@ public class InfoWindowManager
             @Override
             public boolean onPreDraw() {
 
-                centerInfoWindow(infoWindow);
+                centerInfoWindow(infoWindow, view);
                 ensureVisible(view);
 
                 view.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -300,50 +300,43 @@ public class InfoWindowManager
     }
 
     private void updateWithContainerSpec(final View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-
-            view.setBackground(containerSpec.background);
-
-        } else {
-
-            view.setBackgroundDrawable(containerSpec.background);
-
-        }
+        ViewCompat.setBackground(view, containerSpec.background);
     }
 
-    private void animateWindowOpen(@NonNull final InfoWindow infoWindow) {
+    private void animateWindowOpen(@NonNull final InfoWindow infoWindow,
+                                   @NonNull final View container) {
 
         final SimpleAnimationListener animationListener = new SimpleAnimationListener() {
 
             @Override
             public void onAnimationStart(Animation animation) {
 
-                currentWindowContainer.setVisibility(View.VISIBLE);
-                propagateShowEvent(infoWindow, InfoWindow.WindowState.SHOWING);
+                container.setVisibility(View.VISIBLE);
+                propagateShowEvent(infoWindow, InfoWindow.State.SHOWING);
 
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                propagateShowEvent(infoWindow, InfoWindow.WindowState.SHOWN);
-                setInfoWindow(infoWindow);
+                propagateShowEvent(infoWindow, InfoWindow.State.SHOWN);
+                setCurrentWindow(infoWindow);
 
             }
         };
 
         if (showAnimation == null) {
 
-            currentWindowContainer.getViewTreeObserver().addOnPreDrawListener(
+            container.getViewTreeObserver().addOnPreDrawListener(
                     new ViewTreeObserver.OnPreDrawListener() {
 
                         @Override
                         public boolean onPreDraw() {
-                            final int containerWidth = currentWindowContainer.getWidth();
-                            final int containerHeight = currentWindowContainer.getHeight();
+                            final int containerWidth = container.getWidth();
+                            final int containerHeight = container.getHeight();
 
-                            final float pivotX = currentWindowContainer.getX() + containerWidth / 2;
-                            final float pivotY = currentWindowContainer.getY() + containerHeight;
+                            final float pivotX = container.getX() + containerWidth / 2;
+                            final float pivotY = container.getY() + containerHeight;
 
                             final ScaleAnimation scaleAnimation = new ScaleAnimation(
                                     0f, 1f,
@@ -354,20 +347,20 @@ public class InfoWindowManager
                             scaleAnimation.setInterpolator(new DecelerateInterpolator());
                             scaleAnimation.setAnimationListener(animationListener);
 
-                            currentWindowContainer.startAnimation(scaleAnimation);
+                            container.startAnimation(scaleAnimation);
 
-                            currentWindowContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+                            container.getViewTreeObserver().removeOnPreDrawListener(this);
                             return true;
                         }
                     });
         } else {
             showAnimation.setAnimationListener(animationListener);
-            currentWindowContainer.startAnimation(showAnimation);
+            container.startAnimation(showAnimation);
         }
     }
 
     /**
-     * Same as calling <code>hide(infoWindow, true);</code>
+     * Same as calling <code>hide(currentWindow, true);</code>
      *
      * @param infoWindow The {@link InfoWindow} that is to be hidden.
      * @see #hide(InfoWindow, boolean)
@@ -385,7 +378,7 @@ public class InfoWindowManager
      *                   <code>false</code> otherwise.
      */
     public void hide(@NonNull final InfoWindow infoWindow, final boolean animated) {
-        internalHide(currentWindowContainer, infoWindow, animated);
+        internalHide(currentContainer, infoWindow, animated);
     }
 
     private void internalHide(@NonNull final View container, @NonNull final InfoWindow infoWindow) {
@@ -403,11 +396,11 @@ public class InfoWindowManager
 
             if (hideAnimation == null) {
 
-                final int containerWidth = currentWindowContainer.getWidth();
-                final int containerHeight = currentWindowContainer.getHeight();
+                final int containerWidth = container.getWidth();
+                final int containerHeight = container.getHeight();
 
-                final float pivotX = currentWindowContainer.getX() + containerWidth / 2;
-                final float pivotY = currentWindowContainer.getY() + containerHeight;
+                final float pivotX = container.getX() + containerWidth / 2;
+                final float pivotY = container.getY() + containerHeight;
 
                 animation = new ScaleAnimation(
                         1f, 0f,
@@ -426,36 +419,36 @@ public class InfoWindowManager
 
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    toHideWindow.setWindowState(InfoWindow.WindowState.HIDING);
-                    propagateShowEvent(toHideWindow, InfoWindow.WindowState.HIDING);
+                    toHideWindow.setState(InfoWindow.State.HIDING);
+                    propagateShowEvent(toHideWindow, InfoWindow.State.HIDING);
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    removeWindow(container);
+                    removeWindow(toHideWindow, container);
 
-                    if (container.getId() != currentWindowContainer.getId()) {
+                    if (container.getId() != InfoWindowManager.this.currentContainer.getId()) {
                         parent.removeView(container);
                     }
 
-                    toHideWindow.setWindowState(InfoWindow.WindowState.HIDDEN);
-                    propagateShowEvent(toHideWindow, InfoWindow.WindowState.HIDDEN);
+                    toHideWindow.setState(InfoWindow.State.HIDDEN);
+                    propagateShowEvent(toHideWindow, InfoWindow.State.HIDDEN);
                 }
             });
 
-            currentWindowContainer.startAnimation(animation);
+            this.currentContainer.startAnimation(animation);
 
         } else {
 
-            removeWindow(container);
-            propagateShowEvent(toHideWindow, InfoWindow.WindowState.HIDDEN);
+            removeWindow(toHideWindow, container);
+            propagateShowEvent(toHideWindow, InfoWindow.State.HIDDEN);
 
         }
     }
 
     private void propagateShowEvent(
             @NonNull final InfoWindow infoWindow,
-            @NonNull final InfoWindow.WindowState state) {
+            @NonNull final InfoWindow.State state) {
 
         if (windowShowListener != null) {
             switch (state) {
@@ -483,14 +476,15 @@ public class InfoWindowManager
         }
     }
 
-    private void centerInfoWindow(@NonNull final InfoWindow infoWindow) {
+    private void centerInfoWindow(@NonNull final InfoWindow infoWindow,
+                                  @NonNull final View container) {
         final InfoWindow.MarkerSpecification markerSpec = infoWindow.getMarkerSpec();
         final Projection projection = googleMap.getProjection();
 
         final Point windowScreenLocation = projection.toScreenLocation(infoWindow.getPosition());
 
-        final int containerWidth = currentWindowContainer.getWidth();
-        final int containerHeight = currentWindowContainer.getHeight();
+        final int containerWidth = container.getWidth();
+        final int containerHeight = container.getHeight();
 
         final int x;
         if (markerSpec.centerByX()) {
@@ -509,11 +503,11 @@ public class InfoWindowManager
         final int pivotX = containerWidth / 2;
         final int pivotY = containerHeight;
 
-        currentWindowContainer.setPivotX(pivotX);
-        currentWindowContainer.setPivotY(pivotY);
+        container.setPivotX(pivotX);
+        container.setPivotY(pivotY);
 
-        currentWindowContainer.setX(x);
-        currentWindowContainer.setY(y);
+        container.setX(x);
+        container.setY(y);
     }
 
     private boolean ensureVisible(@NonNull final View infoWindowContainer) {
@@ -564,40 +558,26 @@ public class InfoWindowManager
         return visible;
     }
 
-    private void removeWindow(@NonNull final View container) {
-
-        final Fragment windowFragment = fragmentManager.findFragmentById(container.getId());
+    private void removeWindow(@NonNull final InfoWindow window, @NonNull final View container) {
 
         container.setVisibility(View.INVISIBLE);
-
         container.setScaleY(1f);
         container.setScaleX(1f);
         container.clearAnimation();
 
-        if (windowFragment != null) {
-            removeWindowFragment(windowFragment);
-        }
+        removeWindowFragment(window.getFragment());
     }
 
-    private void addWindowFragment(@NonNull final Fragment windowFragment) {
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.add(
-                currentWindowContainer.getId(),
-                windowFragment,
-                FRAGMENT_TAG_INFO
-        ).commit();
-
-        fragmentManager.executePendingTransactions();
+    private void addFragment(@NonNull final Fragment fragment, @NonNull final View container) {
+        fragmentManager.beginTransaction()
+                .replace(container.getId(), fragment, FRAGMENT_TAG_INFO)
+                .commitNow();
     }
 
     private void removeWindowFragment(final Fragment windowFragment) {
-        final FragmentTransaction fragmentTransaction
-                = fragmentManager.beginTransaction();
-
-        fragmentTransaction.remove(windowFragment).commit();
-
-        fragmentManager.executePendingTransactions();
+        fragmentManager.beginTransaction()
+                .remove(windowFragment)
+                .commitNow();
     }
 
     /**
@@ -613,7 +593,7 @@ public class InfoWindowManager
     }
 
     private boolean isOpen() {
-        return currentWindowContainer.getVisibility() == View.VISIBLE;
+        return currentContainer != null && currentContainer.getVisibility() == View.VISIBLE;
     }
 
     /**
@@ -626,8 +606,8 @@ public class InfoWindowManager
         this.windowShowListener = windowShowListener;
     }
 
-    private void setInfoWindow(InfoWindow infoWindow) {
-        this.infoWindow = infoWindow;
+    private void setCurrentWindow(InfoWindow currentWindow) {
+        this.currentWindow = currentWindow;
     }
 
     /**
@@ -699,7 +679,7 @@ public class InfoWindowManager
      */
     public void onDestroy() {
 
-        currentWindowContainer = null;
+        currentContainer = null;
         parent = null;
 
     }
@@ -745,7 +725,7 @@ public class InfoWindowManager
         }
 
         if (isOpen()) {
-            internalHide(currentWindowContainer, infoWindow);
+            internalHide(currentContainer, currentWindow);
         }
 
     }
@@ -771,7 +751,7 @@ public class InfoWindowManager
         }
 
         if (isOpen()) {
-            centerInfoWindow(infoWindow);
+            centerInfoWindow(currentWindow, currentContainer);
         }
     }
 
@@ -896,5 +876,4 @@ public class InfoWindowManager
             this.background = background;
         }
     }
-
 }
