@@ -31,6 +31,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 public class MapInfoWindowFragment extends Fragment {
 
+    private static final String TAG = "MapInfoWindowFragment";
+
     private GoogleMap googleMap;
     private InfoWindowManager infoWindowManager;
 
@@ -50,10 +52,7 @@ public class MapInfoWindowFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        infoWindowManager =
-
-                new InfoWindowManager(getChildFragmentManager());
-
+        infoWindowManager = new InfoWindowManager(getChildFragmentManager());
         infoWindowManager.onParentViewCreated((TouchInterceptFrameLayout) view, savedInstanceState);
     }
 
@@ -69,7 +68,6 @@ public class MapInfoWindowFragment extends Fragment {
                     .getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
-
                             MapInfoWindowFragment.this.googleMap = googleMap;
                             setUpMap();
                         }
