@@ -30,36 +30,36 @@ public class InfoWindow {
     private LatLng position;
     private MarkerSpecification markerSpec;
 
-    private Fragment windowFragment;
+    private Fragment fragment;
 
-    private WindowState windowState = WindowState.HIDDEN;
+    private State state = State.HIDDEN;
 
     /**
      * @param marker The marker which determines the window's position on the screen.
      * @param markerSpec Provides the marker's offsetX and offsetY.
-     * @param windowFragment The actual window that is displayed on the screen.
+     * @param fragment The actual window that is displayed on the screen.
      */
     public InfoWindow(
             Marker marker,
             MarkerSpecification markerSpec,
-            Fragment windowFragment) {
+            Fragment fragment) {
 
-        this(marker.getPosition(), markerSpec, windowFragment);
+        this(marker.getPosition(), markerSpec, fragment);
     }
 
     /**
      * @param position The {@link com.google.android.gms.maps.model.LatLng} which determines the window's position on the screen.
      * @param markerSpec Provides the marker's offsetX and offsetY.
-     * @param windowFragment The actual window that is displayed on the screen.
+     * @param fragment The actual window that is displayed on the screen.
      */
     public InfoWindow(
             LatLng position,
             MarkerSpecification markerSpec,
-            Fragment windowFragment) {
+            Fragment fragment) {
 
         this.position = position;
         this.markerSpec = markerSpec;
-        this.windowFragment = windowFragment;
+        this.fragment = fragment;
     }
 
     public LatLng getPosition() { return position; }
@@ -76,31 +76,27 @@ public class InfoWindow {
         this.markerSpec = markerSpec;
     }
 
-    public Fragment getWindowFragment() {
-        return windowFragment;
-    }
-
-    public void setWindowFragment(Fragment windowFragment) {
-        this.windowFragment = windowFragment;
+    public Fragment getFragment() {
+        return fragment;
     }
 
     /**
      * Get window's state which could be one of the following:
      * <br>
-     * {@link WindowState#SHOWING}, {@link WindowState#SHOWN},
-     * {@link WindowState#HIDING}, {@link WindowState#HIDDEN}
+     * {@link State#SHOWING}, {@link State#SHOWN},
+     * {@link State#HIDING}, {@link State#HIDDEN}
      *
      * @return The InfoWindow's state.
      */
-    public WindowState getWindowState() {
-        return windowState;
+    public State getState() {
+        return state;
     }
 
-    public void setWindowState(WindowState windowState) {
-        this.windowState = windowState;
+    public void setState(State state) {
+        this.state = state;
     }
 
-    public enum WindowState {
+    public enum State {
         SHOWING, SHOWN, HIDING, HIDDEN
     }
 
@@ -164,7 +160,7 @@ public class InfoWindow {
          *                  same as the marker's screen x coordinate. Pass false if you want
          *                  offsetX to be used instead.
          *
-         * @see com.appolica.interactiveinfowindow.InfoWindowManager#centerInfoWindow(InfoWindow)
+         * @see com.appolica.interactiveinfowindow.InfoWindowManager#centerInfoWindow(InfoWindow, android.view.View)
          */
         public void setCenterByX(boolean centerByX) {
             this.centerByX = centerByX;
@@ -183,7 +179,7 @@ public class InfoWindow {
          *                  same as the marker's screen y coordinate. Pass false if you want
          *                  offsetX to be used instead.
          *
-         * @see com.appolica.interactiveinfowindow.InfoWindowManager#centerInfoWindow(InfoWindow)
+         * @see com.appolica.interactiveinfowindow.InfoWindowManager#centerInfoWindow(InfoWindow, android.view.View)
          */
         public void setCenterByY(boolean centerByY) {
             this.centerByY = centerByY;
@@ -208,10 +204,13 @@ public class InfoWindow {
     public boolean equals(Object o) {
 
         if (o instanceof InfoWindow) {
-            final boolean markerCheck = ((InfoWindow) o).getPosition().equals(position);
-            final boolean specCheck = ((InfoWindow) o).getMarkerSpec().equals(markerSpec);
+            final InfoWindow queryWindow = (InfoWindow) o;
 
-            return markerCheck && specCheck;
+            final boolean markerCheck = queryWindow.getPosition().equals(position);
+            final boolean specCheck = queryWindow.getMarkerSpec().equals(markerSpec);
+            final boolean fragmentCheck = queryWindow.getFragment() == fragment;
+
+            return markerCheck && specCheck && fragmentCheck;
         }
 
         return super.equals(o);
