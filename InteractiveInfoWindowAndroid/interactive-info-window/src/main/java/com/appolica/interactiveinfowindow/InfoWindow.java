@@ -23,16 +23,16 @@ import java.io.Serializable;
 
 /**
  * This class contains everything needed for an InfoWindow to be shown.
- * It also provides a state that shows whether the window is already shown/hidden
+ * It also provides a windowState that shows whether the window is already shown/hidden
  * or is in the middle of showing/hiding.
  */
 public class InfoWindow {
     private LatLng position;
     private MarkerSpecification markerSpec;
 
-    private Fragment fragment;
+    private Fragment windowFragment;
 
-    private State state = State.HIDDEN;
+    private State windowState = State.HIDDEN;
 
     /**
      * @param marker The marker which determines the window's position on the screen.
@@ -59,7 +59,7 @@ public class InfoWindow {
 
         this.position = position;
         this.markerSpec = markerSpec;
-        this.fragment = fragment;
+        this.windowFragment = fragment;
     }
 
     public LatLng getPosition() { return position; }
@@ -76,24 +76,24 @@ public class InfoWindow {
         this.markerSpec = markerSpec;
     }
 
-    public Fragment getFragment() {
-        return fragment;
+    public Fragment getWindowFragment() {
+        return windowFragment;
     }
 
     /**
-     * Get window's state which could be one of the following:
+     * Get window's windowState which could be one of the following:
      * <br>
      * {@link State#SHOWING}, {@link State#SHOWN},
      * {@link State#HIDING}, {@link State#HIDDEN}
      *
-     * @return The InfoWindow's state.
+     * @return The InfoWindow's windowState.
      */
-    public State getState() {
-        return state;
+    public State getWindowState() {
+        return windowState;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setWindowState(State windowState) {
+        this.windowState = windowState;
     }
 
     public enum State {
@@ -208,7 +208,7 @@ public class InfoWindow {
 
             final boolean markerCheck = queryWindow.getPosition().equals(position);
             final boolean specCheck = queryWindow.getMarkerSpec().equals(markerSpec);
-            final boolean fragmentCheck = queryWindow.getFragment() == fragment;
+            final boolean fragmentCheck = queryWindow.getWindowFragment() == windowFragment;
 
             return markerCheck && specCheck && fragmentCheck;
         }

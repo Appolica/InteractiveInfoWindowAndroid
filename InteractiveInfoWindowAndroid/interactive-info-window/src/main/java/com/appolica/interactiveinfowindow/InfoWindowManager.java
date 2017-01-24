@@ -268,7 +268,7 @@ public class InfoWindowManager
                               @NonNull final View container,
                               final boolean animated) {
 
-        addFragment(infoWindow.getFragment(), container);
+        addFragment(infoWindow.getWindowFragment(), container);
         prepareView(container, infoWindow);
 
         if (animated) {
@@ -419,7 +419,7 @@ public class InfoWindowManager
 
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    toHideWindow.setState(InfoWindow.State.HIDING);
+                    toHideWindow.setWindowState(InfoWindow.State.HIDING);
                     propagateShowEvent(toHideWindow, InfoWindow.State.HIDING);
                 }
 
@@ -431,7 +431,7 @@ public class InfoWindowManager
                         parent.removeView(container);
                     }
 
-                    toHideWindow.setState(InfoWindow.State.HIDDEN);
+                    toHideWindow.setWindowState(InfoWindow.State.HIDDEN);
                     propagateShowEvent(toHideWindow, InfoWindow.State.HIDDEN);
                 }
             });
@@ -565,7 +565,7 @@ public class InfoWindowManager
         container.setScaleX(1f);
         container.clearAnimation();
 
-        removeWindowFragment(window.getFragment());
+        removeWindowFragment(window.getWindowFragment());
     }
 
     private void addFragment(@NonNull final Fragment fragment, @NonNull final View container) {
