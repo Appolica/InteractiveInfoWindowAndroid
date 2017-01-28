@@ -13,22 +13,28 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
-ext {
-    PUBLISH_GROUP_ID = 'com.appolica'
-    PUBLISH_ARTIFACT_ID = 'interactive-info-window'
-    PUBLISH_VERSION = '1.0.3'
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.4.0'
+    }
+
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 3
-        versionName "1.0.3"
+        versionName "1.0.5"
     }
     buildTypes {
         release {
@@ -40,8 +46,17 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.google.android.gms:play-services-maps:10.0.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
 }
 
-apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
+publish {
+    userOrg = 'appolica-ltd'
+    groupId = 'com.appolica'
+    artifactId = 'interactive-info-window'
+    publishVersion = '1.0.5'
+    website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
+    licences = ['Apache-2.0']
+    repoName = 'appolica'
+    uploadName = 'Android'
+}
