@@ -583,6 +583,8 @@ public class InfoWindowManager
     /**
      * Generate default {@link ContainerSpecification} for the container view.
      *
+     * @param context used to work with Resources.
+     *
      * @return New instance of the generated default container specs.
      */
     public ContainerSpecification generateDefaultContainerSpecs(Context context) {
@@ -687,7 +689,7 @@ public class InfoWindowManager
     /**
      * Call this method in your onMapReady(GoogleMap googleMap) callback if you are not using
      * {@link com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment}.
-     * <p>
+     * <br><br>
      * <p>Keep in mind that this method sets all camera listeners and map click listener
      * to the googleMap object and you shouldn't set them by yourself. However if you want
      * to listen for these events you can use the methods below: <br></p>
@@ -699,7 +701,8 @@ public class InfoWindowManager
      * {@link #setOnCameraMoveListener(GoogleMap.OnCameraMoveListener)}
      * <br>
      * {@link #setOnCameraIdleListener(GoogleMap.OnCameraIdleListener)}
-     *
+     * </p>
+     * <br>
      * @param googleMap The GoogleMap object from onMapReady callback.
      * @see #setOnMapClickListener(GoogleMap.OnMapClickListener)
      * @see #setOnCameraMoveStartedListener(GoogleMap.OnCameraMoveStartedListener)
@@ -864,10 +867,18 @@ public class InfoWindowManager
     public static class ContainerSpecification {
         private Drawable background;
 
+        /**
+         * Create a new instance of ContainerSpecification by providing the container background.
+         * @param background the background of the container.
+         */
         public ContainerSpecification(Drawable background) {
             this.background = background;
         }
 
+        /**
+         * This is what is called to set the background of the container view.
+         * @return the background of the container view.
+         */
         public Drawable getBackground() {
             return background;
         }
