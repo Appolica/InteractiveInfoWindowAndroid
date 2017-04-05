@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.appolica:interactive-info-window:1.0.4'
+    compile 'com.appolica:interactive-info-window:1.0.5'
 }
 
 ```
@@ -95,7 +95,25 @@ _If you don't want to use our fragment it's okay but it's not that straight-forw
  * ```public void setHideAnimation(Animation hideAnimation)``` - Set your own InfoWindow hide animation.
  * ```public void setContainerSpec(ContainerSpecification containerSpec)``` - Set the container specification for your InfoWindow container. The ContainerSpecification class wraps (at least for now) only the backgorund drawable of the container view. You can change the background from here.
  
-The following listener settters are a copy of GoogleMap's setters. Use these methods instead of the original ones.
+### InfoWindow:
+ * ```public InfoWindow(Marker marker, MarkerSpecification markerSpec, Fragment fragment)``` - 
+    * marker - The marker which determines the window's position on the screen
+    * markerSpec - Provides the marker's offsetX and offsetY
+    * fragment - The actual window that is displayed on the screen
+    
+ * ```public InfoWindow(LatLng position, MarkerSpecification markerSpec, Fragment fragment)``` - 
+    * position - The LatLng position which determines the window's position on the screen.
+    * markerSpec - Provides the marker's offsetX and offsetY
+    * fragment - The actual window that is displayed on the screen
+
+### InfoWindow.MarkerSpecification:
+ * ```public MarkerSpecification(int offsetX, int offsetY)``` - Create marker specification by providing InfoWindow's x and y offsets from marker's screen location.
+    
+    Note: By default offsetX will be ignored, so in order for it to take effect, you must call setCenterByX(false). 
+    
+    Also if you want to use dp, you should convert the values to px by yourself. The constructor expects absolute pixel values.
+
+### The following listener settters are a copy of GoogleMap's setters. Use these methods instead of the original ones.
  
  * ```public void setOnMapClickListener(GoogleMap.OnMapClickListener onMapClickListener)```
  * ```public void setOnCameraIdleListener(GoogleMap.OnCameraIdleListener onCameraIdleListener)```
