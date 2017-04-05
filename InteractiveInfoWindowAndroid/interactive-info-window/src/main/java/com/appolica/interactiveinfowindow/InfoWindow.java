@@ -116,6 +116,7 @@ public class InfoWindow {
          *    must call setCenterByX(false).
          *
          *    Also if you want to use dp, you should convert the values to px by yourself.
+         *    The constructor expects absolute pixel values.
          * </p>
          *
          * @param offsetX InfoWindow's offset by x from marker's screen location.
