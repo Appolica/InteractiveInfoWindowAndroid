@@ -26,15 +26,16 @@ buildscript {
 
 }
 
+
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 7
-        versionName "v1.0.6"
+        versionCode 3
+        versionName LIB_VERSION
     }
     buildTypes {
         release {
@@ -47,14 +48,14 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:10.2.1'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
 }
 
 publish {
     userOrg = 'appolica-ltd'
     groupId = 'com.appolica'
     artifactId = 'interactive-info-window'
-    publishVersion = 'v1.0.6'
+    publishVersion = LIB_VERSION
     website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
     licences = ['Apache-2.0']
     repoName = 'appolica'
