@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/appolica-ltd/appolica/InfoWindow/images/download.svg?version=v1.0.6) ](https://bintray.com/appolica-ltd/appolica/InfoWindow/v1.0.6/link)
+[ ![Download](https://api.bintray.com/packages/appolica-ltd/appolica/InfoWindow/images/download.svg?version=1.0.7) ](https://bintray.com/appolica-ltd/appolica/InfoWindow/1.0.7/link)
 
 # InteractiveInfoWindowAndroid *by Appolica*
 
