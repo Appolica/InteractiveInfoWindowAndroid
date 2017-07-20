@@ -45,12 +45,13 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.It
     public void onBindViewHolder(ItemViewHolder holder, final int position) {
         holder.textView.setText(data.get(position).getSimpleName());
 
+        final int pos = position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Context context = v.getContext();
 
-                context.startActivity(new Intent(context, data.get(position)));
+                context.startActivity(new Intent(context, data.get(pos)));
             }
         });
     }
