@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".activities.MapViewActivity">
         </activity>
+        <activity android:name=".activities.MapViewClusteringActivity">
+        </activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
