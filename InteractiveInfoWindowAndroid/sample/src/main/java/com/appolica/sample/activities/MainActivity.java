@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<Class<? extends Activity>> activityClasses = new ArrayList<>();
         activityClasses.add(MapFragmentActivity.class);
         activityClasses.add(MapViewActivity.class);
+        activityClasses.add(MapViewClusteringActivity.class);
 
         adapter.addData(activityClasses);
 
