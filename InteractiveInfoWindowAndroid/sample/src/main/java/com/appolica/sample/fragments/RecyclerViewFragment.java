@@ -1,13 +1,14 @@
 package com.appolica.sample.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.appolica.sample.R;
 
@@ -25,7 +26,7 @@ public class RecyclerViewFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.infoWindowRecyclerView);
+        final RecyclerView recyclerView = view.findViewById(R.id.infoWindowRecyclerView);
         final InfoWindowRVAdapter adapter = new InfoWindowRVAdapter();
 
         recyclerView.setHasFixedSize(true);
