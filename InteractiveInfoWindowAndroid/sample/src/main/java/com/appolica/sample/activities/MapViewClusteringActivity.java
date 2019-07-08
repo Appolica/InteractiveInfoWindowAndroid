@@ -2,7 +2,8 @@ package com.appolica.sample.activities;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v4.app.FragmentActivity;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.appolica.interactiveinfowindow.InfoWindow;
 import com.appolica.interactiveinfowindow.InfoWindowManager;
@@ -34,10 +35,10 @@ public class MapViewClusteringActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_with_map_view);
-        mapView = (MapView) findViewById(R.id.mapView);
+        mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         final TouchInterceptFrameLayout mapViewContainer =
-                (TouchInterceptFrameLayout) findViewById(R.id.mapViewContainer);
+                findViewById(R.id.mapViewContainer);
 
         mapView.getMapAsync(this);
 
