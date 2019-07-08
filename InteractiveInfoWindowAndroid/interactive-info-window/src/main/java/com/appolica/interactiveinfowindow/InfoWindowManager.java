@@ -452,6 +452,8 @@ public class InfoWindowManager
             @NonNull final InfoWindow infoWindow,
             @NonNull final InfoWindow.State state) {
 
+        infoWindow.setWindowState(state);
+
         if (windowShowListener != null) {
             switch (state) {
                 case SHOWING:
