@@ -278,7 +278,7 @@ public class InfoWindowManager
             animateWindowOpen(infoWindow, container);
 
         } else {
-
+            propagateShowEvent(infoWindow, InfoWindow.State.SHOWN);
             container.setVisibility(View.VISIBLE);
 
         }
@@ -452,27 +452,21 @@ public class InfoWindowManager
             @NonNull final InfoWindow infoWindow,
             @NonNull final InfoWindow.State state) {
 
+        infoWindow.setWindowState(state);
+
         if (windowShowListener != null) {
             switch (state) {
                 case SHOWING:
-
                     windowShowListener.onWindowShowStarted(infoWindow);
-
                     break;
                 case SHOWN:
-
                     windowShowListener.onWindowShown(infoWindow);
-
                     break;
                 case HIDING:
-
                     windowShowListener.onWindowHideStarted(infoWindow);
-
                     break;
                 case HIDDEN:
-
                     windowShowListener.onWindowHidden(infoWindow);
-
                     break;
             }
         }
@@ -586,7 +580,6 @@ public class InfoWindowManager
      * Generate default {@link ContainerSpecification} for the container view.
      *
      * @param context used to work with Resources.
-     *
      * @return New instance of the generated default container specs.
      */
     public ContainerSpecification generateDefaultContainerSpecs(Context context) {
@@ -705,6 +698,7 @@ public class InfoWindowManager
      * {@link #setOnCameraIdleListener(GoogleMap.OnCameraIdleListener)}
      * </p>
      * <br>
+     *
      * @param googleMap The GoogleMap object from onMapReady callback.
      * @see #setOnMapClickListener(GoogleMap.OnMapClickListener)
      * @see #setOnCameraMoveStartedListener(GoogleMap.OnCameraMoveStartedListener)
@@ -871,6 +865,7 @@ public class InfoWindowManager
 
         /**
          * Create a new instance of ContainerSpecification by providing the container background.
+         *
          * @param background the background of the container.
          */
         public ContainerSpecification(Drawable background) {
@@ -879,6 +874,7 @@ public class InfoWindowManager
 
         /**
          * This is what is called to set the background of the container view.
+         *
          * @return the background of the container view.
          */
         public Drawable getBackground() {
