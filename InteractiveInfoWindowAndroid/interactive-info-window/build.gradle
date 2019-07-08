@@ -13,7 +13,7 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+//apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 buildscript {
     repositories {
@@ -21,18 +21,17 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.novoda:bintray-release:0.4.0'
+//        classpath 'com.novoda:bintray-release:0.9.1'
     }
 
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 7
         versionName "v1.0.6"
     }
@@ -45,18 +44,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:10.2.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
 
-publish {
-    userOrg = 'appolica-ltd'
-    groupId = 'com.appolica'
-    artifactId = 'interactive-info-window'
-    publishVersion = 'v1.0.6'
-    website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
-    licences = ['Apache-2.0']
-    repoName = 'appolica'
-    uploadName = 'InfoWindow'
-}
+//publish {
+//    userOrg = 'appolica-ltd'
+//    groupId = 'com.appolica'
+//    artifactId = 'interactive-info-window'
+//    publishVersion = 'v1.0.6'
+//    website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
+//    licences = ['Apache-2.0']
+//    repoName = 'appolica'
+//    uploadName = 'InfoWindow'
+//}
