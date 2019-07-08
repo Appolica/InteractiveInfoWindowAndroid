@@ -28,7 +28,6 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +37,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.appolica.interactiveinfowindow.animation.SimpleAnimationListener;
+import com.appolica.interactiveinfowindow.customview.DisallowInterceptLayout;
 import com.appolica.interactiveinfowindow.customview.TouchInterceptFrameLayout;
 import com.appolica.mapanimations.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -176,8 +176,9 @@ public class InfoWindowManager
     }
 
     private View createContainer(@NonNull final ViewGroup parent) {
-        final LinearLayout container = new LinearLayout(parent.getContext());
+        final DisallowInterceptLayout container = new DisallowInterceptLayout(parent.getContext());
 
+        container.setDisallowParentIntercept(true);
         container.setLayoutParams(generateDefaultLayoutParams());
         container.setId(idProvider.getNewId());
         container.setVisibility(View.INVISIBLE);

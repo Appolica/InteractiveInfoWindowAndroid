@@ -22,9 +22,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-/**
- * Created by Bogomil Kolarov on 31.08.16.
- */
 public class TouchInterceptFrameLayout extends FrameLayout {
 
     private GestureDetector detector;
@@ -47,16 +44,18 @@ public class TouchInterceptFrameLayout extends FrameLayout {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (detector != null) {
             detector.onTouchEvent(ev);
         }
-        return super.dispatchTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        detector.onTouchEvent(event);
+        if (detector != null) {
+            detector.onTouchEvent(event);
+        }
         return super.onTouchEvent(event);
     }
 

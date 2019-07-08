@@ -33,7 +33,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 7
-        versionName "v1.0.6"
+        versionName LIB_VERSION
     }
     buildTypes {
         release {
@@ -53,7 +53,7 @@ publish {
     userOrg = 'appolica-ltd'
     groupId = 'com.appolica'
     artifactId = 'interactive-info-window'
-    publishVersion = 'v1.0.6'
+    publishVersion = LIB_VERSION
     desc = 'InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map.'
     website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
     licences = ['Apache-2.0']
