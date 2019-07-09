@@ -21,20 +21,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.novoda:bintray-release:0.4.0'
+        classpath 'com.novoda:bintray-release:0.9.1'
     }
 
 }
 
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 3
+        targetSdkVersion 28
+        versionCode 7
         versionName LIB_VERSION
     }
     buildTypes {
@@ -46,9 +44,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
 
 publish {
@@ -56,6 +54,7 @@ publish {
     groupId = 'com.appolica'
     artifactId = 'interactive-info-window'
     publishVersion = LIB_VERSION
+    desc = 'InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map.'
     website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
     licences = ['Apache-2.0']
     repoName = 'appolica'

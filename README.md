@@ -1,4 +1,6 @@
-[ ![Download](https://api.bintray.com/packages/appolica-ltd/appolica/InfoWindow/images/download.svg?version=1.0.7) ](https://bintray.com/appolica-ltd/appolica/InfoWindow/1.0.7/link)
+
+[ ![Download](https://api.bintray.com/packages/appolica-ltd/appolica/InfoWindow/images/download.svg) ](https://bintray.com/appolica-ltd/appolica/InfoWindow/_latestVersion)
+
 
 # InteractiveInfoWindowAndroid *by Appolica*
 
@@ -19,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.appolica:interactive-info-window:v1.0.6'
+    implementation 'com.appolica:interactive-info-window:v1.0.6'
 }
 
 ```
