@@ -17,11 +17,11 @@ InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives 
 
 ```gradle
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    implementation 'com.appolica:interactive-info-window:v1.0.6'
+    implementation 'com.appolica:interactive-info-window-android:1.0.8'
 }
 
 ```

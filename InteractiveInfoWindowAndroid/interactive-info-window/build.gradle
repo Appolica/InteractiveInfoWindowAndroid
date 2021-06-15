@@ -13,33 +13,29 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.9.1'
-    }
-
-}
+apply from: 'versioning.gradle'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 7
-        versionName LIB_VERSION
+        versionName getVersionName()
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
@@ -49,14 +45,76 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
 
-publish {
-    userOrg = 'appolica-ltd'
-    groupId = 'com.appolica'
-    artifactId = 'interactive-info-window'
-    publishVersion = LIB_VERSION
-    desc = 'InteractiveInfoWindowAndroid is (suprisingly :D) an Android library which gives you the opportunity to show interactive info windows on your google map.'
-    website = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
-    licences = ['Apache-2.0']
-    repoName = 'appolica'
-    uploadName = 'InfoWindow'
+afterEvaluate {
+    publishing {
+        publications {
+            aar(MavenPublication) {
+                from components.release
+                artifactId = 'interactive-info-window-android'
+                groupId = "com.appolica"
+                version = getVersionName()
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.appolica'
+            artifactId = 'interactive-info-window-android'
+            version = getVersionName()
+        }
+        maven(MavenPublication) {
+            pom {
+                name = 'Interactive Info Window Android'
+                description = 'InteractiveInfoWindowAndroid is an Android library which gives you the opportunity to show interactive info windows on your google map'
+                url = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'appolica'
+                        name = 'Appolica'
+                        email = 'office@appolica.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/Appolica/InteractiveInfoWindowAndroid.git'
+                    developerConnection = 'scm:git:ssh://github.com/Appolica/InteractiveInfoWindowAndroid.git'
+                    url = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
+                }
+            }
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = 'https://s01.oss.sonatype.org/content/repositories/releases/'
+//            url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    def signingKeyId = findProperty("signing.keyId")
+    def signingPassword = findProperty("signing.password")
+    def signingKey = findProperty("signing.secretKeyRingFile")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 }
