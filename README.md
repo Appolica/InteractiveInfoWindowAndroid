@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.appolica:interactive-info-window-android:1.0.8'
+    implementation 'com.appolica:interactive-info-window-android:1.0.10'
 }
 
 ```

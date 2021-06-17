@@ -77,6 +77,6 @@
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-runtime:2.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.interpolator:interpolator:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation-experimental:1.0.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.appolica:interactive-info-window-android:1.0.8@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.appolica:interactive-info-window-android:1.0.10@aar" level="project" />
   </component>
 </module>
