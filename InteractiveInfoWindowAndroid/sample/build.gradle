@@ -37,5 +37,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
-    implementation 'com.appolica:interactive-info-window-android:1.0.8'
+    implementation 'com.appolica:interactive-info-window-android:1.0.10'
 }
