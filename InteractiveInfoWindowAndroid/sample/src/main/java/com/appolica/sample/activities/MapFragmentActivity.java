@@ -1,6 +1,7 @@
 package com.appolica.sample.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -84,21 +85,21 @@ public class MapFragmentActivity
 
     @Override
     public void onWindowShowStarted(@NonNull InfoWindow infoWindow) {
-//        Log.d("debug", "onWindowShowStarted: " + infoWindow);
+        Log.d("debug", "onWindowShowStarted: " + infoWindow);
     }
 
     @Override
     public void onWindowShown(@NonNull InfoWindow infoWindow) {
-//        Log.d("debug", "onWindowShown: " + infoWindow);
+        Log.d("debug", "onWindowShown: " + infoWindow);
     }
 
     @Override
     public void onWindowHideStarted(@NonNull InfoWindow infoWindow) {
-//        Log.d("debug", "onWindowHideStarted: " + infoWindow);
+        Log.d("debug", "onWindowHideStarted: " + infoWindow);
     }
 
     @Override
     public void onWindowHidden(@NonNull InfoWindow infoWindow) {
-//        Log.d("debug", "onWindowHidden: " + infoWindow);
+        Log.d("debug", "onWindowHidden: " + infoWindow);
     }
 }
