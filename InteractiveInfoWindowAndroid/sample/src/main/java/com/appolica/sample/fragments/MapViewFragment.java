@@ -56,6 +56,13 @@ public class MapViewFragment
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+        infoWindowManager.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
