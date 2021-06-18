@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mapViewSampleFragment">
+
+    <fragment
+        android:id="@+id/mapSampleFragment"
+        android:name="com.appolica.sample.fragments.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_sample_map" />
+
+    <fragment
+        android:id="@+id/mapViewSampleFragment"
+        android:name="com.appolica.sample.fragments.MapViewFragment"
+        android:label="fragment_map_view"
+        tools:layout="@layout/fragment_sample_map_view" />
+</navigation>
