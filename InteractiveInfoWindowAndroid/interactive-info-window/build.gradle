@@ -59,51 +59,10 @@ afterEvaluate {
 }
 
 publishing {
-//    publications {
-//        maven(MavenPublication) {
-//            groupId = 'com.appolica'
-//            artifactId = 'interactive-info-window-android'
-//            version = getVersionName()
-//        }
-//        maven(MavenPublication) {
-//            pom {
-//                name = 'Interactive Info Window Android'
-//                description = 'InteractiveInfoWindowAndroid is an Android library which gives you the opportunity to show interactive info windows on your google map'
-//                url = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
-//
-//                licenses {
-//                    license {
-//                        name = 'The Apache License, Version 2.0'
-//                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//                developers {
-//                    developer {
-//                        id = 'appolica'
-//                        name = 'Appolica'
-//                        email = 'office@appolica.com'
-//                    }
-//                }
-//                scm {
-//                    connection = 'scm:git:git://github.com/Appolica/InteractiveInfoWindowAndroid.git'
-//                    developerConnection = 'scm:git:ssh://github.com/Appolica/InteractiveInfoWindowAndroid.git'
-//                    url = 'https://github.com/Appolica/InteractiveInfoWindowAndroid'
-//                }
-//            }
-//            versionMapping {
-//                usage('java-api') {
-//                    fromResolutionOf('runtimeClasspath')
-//                }
-//                usage('java-runtime') {
-//                    fromResolutionResult()
-//                }
-//            }
-//        }
-//    }
     repositories {
         maven {
             url = 'https://s01.oss.sonatype.org/content/repositories/releases/'
-//            url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+//            url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'   // Repository for snapshot versions of library.
             credentials {
                 username = ossrhUsername
                 password = ossrhPassword
