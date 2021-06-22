@@ -1,25 +1,27 @@
-package com.appolica.sample.activities;
+package com.appolica.sample.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.appolica.interactiveinfowindow.InfoWindow;
 import com.appolica.interactiveinfowindow.InfoWindowManager;
 import com.appolica.interactiveinfowindow.fragment.MapInfoWindowFragment;
 import com.appolica.sample.R;
-import com.appolica.sample.fragments.FormFragment;
-import com.appolica.sample.fragments.RecyclerViewFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapFragmentActivity
-        extends FragmentActivity
+public class MapFragment
+        extends Fragment
         implements InfoWindowManager.WindowShowListener,
         GoogleMap.OnMarkerClickListener {
 
@@ -31,12 +33,13 @@ public class MapFragmentActivity
     private InfoWindowManager infoWindowManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sample_with_map_fragment);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_sample_map, container, false);
 
         final MapInfoWindowFragment mapInfoWindowFragment =
-                (MapInfoWindowFragment) getSupportFragmentManager().findFragmentById(R.id.infoWindowMap);
+                (MapInfoWindowFragment) getChildFragmentManager().findFragmentById(R.id.infoWindowMapFragment);
 
         infoWindowManager = mapInfoWindowFragment.infoWindowManager();
         infoWindowManager.setHideOnFling(true);
@@ -56,12 +59,13 @@ public class MapFragmentActivity
                 recyclerWindow = new InfoWindow(marker1, markerSpec, new RecyclerViewFragment());
                 formWindow = new InfoWindow(marker2, markerSpec, new FormFragment());
 
-                googleMap.setOnMarkerClickListener(MapFragmentActivity.this);
+                googleMap.setOnMarkerClickListener(MapFragment.this);
             }
         });
 
-        infoWindowManager.setWindowShowListener(MapFragmentActivity.this);
+        infoWindowManager.setWindowShowListener(MapFragment.this);
 
+        return view;
     }
 
     @Override
