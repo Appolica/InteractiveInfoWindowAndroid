@@ -99,6 +99,6 @@
     <orderEntry type="library" name="Gradle: androidx.arch.core:core-runtime:2.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.navigation:navigation-common:2.3.5@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.annotation:annotation-experimental:1.0.0@aar" level="project" />
-    <orderEntry type="module" module-name="InteractiveInfoWindowAndroid.interactive-info-window" />
+    <orderEntry type="library" name="Gradle: com.appolica:interactive-info-window-android:1.1.0@aar" level="project" />
   </component>
 </module>
