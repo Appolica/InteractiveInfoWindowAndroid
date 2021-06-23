@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextFormInfoWindow"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:text="@string/yes"/>
 
     <Button
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextFormInfoWindow"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:text="@string/yes"/>
 
 </RelativeLayout>
