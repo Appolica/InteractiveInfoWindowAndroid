@@ -34,7 +34,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation project (':interactive-info-window')
+//    implementation project (':interactive-info-window')
 
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -44,5 +44,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
-//    implementation 'com.appolica:interactive-info-window-android:1.0.10'
+    implementation 'com.appolica:interactive-info-window-android:1.1.0'
 }
