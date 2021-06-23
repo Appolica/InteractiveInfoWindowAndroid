@@ -45,6 +45,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
 
 /**
  * This is where all the magic happens. Use this class to show your interactive {@link InfoWindow}
@@ -55,7 +57,9 @@ public class InfoWindowManager
         GoogleMap.OnCameraMoveStartedListener,
         GoogleMap.OnCameraMoveListener,
         GoogleMap.OnCameraMoveCanceledListener,
-        GoogleMap.OnMapClickListener {
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnPolylineClickListener,
+        GoogleMap.OnPolygonClickListener{
 
     public static final String FRAGMENT_TAG_INFO = "InfoWindow";
 
@@ -82,6 +86,8 @@ public class InfoWindowManager
     private GoogleMap.OnCameraMoveStartedListener onCameraMoveStartedListener;
     private GoogleMap.OnCameraMoveListener onCameraMoveListener;
     private GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener;
+    private GoogleMap.OnPolylineClickListener onPolylineClickListener;
+    private GoogleMap.OnPolygonClickListener onPolygonClickListener;
 
     private Animation showAnimation;
     private Animation hideAnimation;
@@ -715,6 +721,8 @@ public class InfoWindowManager
         googleMap.setOnCameraMoveStartedListener(this);
         googleMap.setOnCameraMoveListener(this);
         googleMap.setOnCameraMoveCanceledListener(this);
+        googleMap.setOnPolylineClickListener(this);
+        googleMap.setOnPolygonClickListener(this);
     }
 
     @Override
@@ -759,6 +767,16 @@ public class InfoWindowManager
         if (onCameraMoveCanceledListener != null) {
             onCameraMoveCanceledListener.onCameraMoveCanceled();
         }
+    }
+
+    @Override
+    public void onPolylineClick(@NonNull Polyline polyline) {
+        onPolylineClickListener.onPolylineClick(polyline);
+    }
+
+    @Override
+    public void onPolygonClick(@NonNull Polygon polygon) {
+        onPolygonClickListener.onPolygonClick(polygon);
     }
 
     /**
@@ -811,6 +829,26 @@ public class InfoWindowManager
             final GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener) {
 
         this.onCameraMoveCanceledListener = onCameraMoveCanceledListener;
+    }
+
+    /**
+     * Set onPolylineClickListener.
+     *
+     * @param onPolylineClickListener The callback that will run.
+     */
+    public void setOnPolylineClickListener(final GoogleMap.OnPolylineClickListener onPolylineClickListener) {
+
+        this.onPolylineClickListener = onPolylineClickListener;
+    }
+
+    /**
+     * Set onPolygonClickListener.
+     *
+     * @param onPolygonClickListener The callback that will run.
+     */
+    public void setOnPolygonClickListener(final  GoogleMap.OnPolygonClickListener onPolygonClickListener) {
+
+        this.onPolygonClickListener = onPolygonClickListener;
     }
 
     /**
