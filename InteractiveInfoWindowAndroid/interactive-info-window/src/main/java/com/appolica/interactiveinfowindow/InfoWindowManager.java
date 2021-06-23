@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -343,8 +344,8 @@ public class InfoWindowManager
                             final int containerWidth = container.getWidth();
                             final int containerHeight = container.getHeight();
 
-                            final float pivotX = container.getX() + containerWidth / 2;
-                            final float pivotY = container.getY() + containerHeight;
+                            final float pivotX = container.getTranslationX() + containerWidth / 2;
+                            final float pivotY = container.getTranslationY() + containerHeight;
 
                             final ScaleAnimation scaleAnimation = new ScaleAnimation(
                                     0f, 1f,
@@ -407,8 +408,8 @@ public class InfoWindowManager
                 final int containerWidth = container.getWidth();
                 final int containerHeight = container.getHeight();
 
-                final float pivotX = container.getX() + containerWidth / 2;
-                final float pivotY = container.getY() + containerHeight;
+                final float pivotX = container.getTranslationX() + containerWidth / 2;
+                final float pivotY = container.getTranslationY() + containerHeight;
 
                 animation = new ScaleAnimation(
                         1f, 0f,
